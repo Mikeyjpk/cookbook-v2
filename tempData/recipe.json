@@ -1,0 +1,53 @@
+{
+  "author_id": 1,
+  "recipe_id": 1,
+  "name": "Eggs on toast",
+  "description": "This describes eggs on toast",
+  "servings": 1,
+  "cook_time": 10,
+  "prep_time": 5,
+  "ingredients": [
+    {
+      "label": "egg",
+      "value": 2,
+      "metric": "unit"
+    },
+    {
+      "label": "toast",
+      "value": 2,
+      "metric": "slice"
+    },
+    {
+      "label": "butter",
+      "value": 2,
+      "metric": "tsp"
+    }
+  ],
+  "steps": [
+    {
+      "step_number": 1,
+      "step_description": "This is step 1",
+      "step_addit": "This is additional info for step 1"
+    },
+    {
+      "step_number": 2,
+      "step_description": "This is step 2",
+      "step_addit": "This is additional info for step 2"
+    },
+    {
+      "step_number": 3,
+      "step_description": "This is step 3",
+      "step_addit": "This is additional info for step 3"
+    }
+  ],
+  "images": [
+    {
+      "value": 1,
+      "url": "image url goes here"
+    },
+    {
+      "value": 2,
+      "url": "image url goes here"
+    }
+  ]
+}

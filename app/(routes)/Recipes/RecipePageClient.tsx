@@ -4,11 +4,11 @@ import axio from "axios";
 import { useEffect, useState } from "react";
 import RecipeCard from "@/app/components/RecipeCard";
 
-interface RecipeClientProps {
-	userId?: any;
+interface RecipePageClientProps {
+	userId?: string;
 }
 
-const RecipeClient: React.FC<RecipeClientProps> = ({ userId }) => {
+const RecipePageClient: React.FC<RecipePageClientProps> = ({ userId }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [recipes, setRecipes] = useState<any[]>([]);
 
@@ -43,4 +43,4 @@ const RecipeClient: React.FC<RecipeClientProps> = ({ userId }) => {
 	);
 };
 
-export default RecipeClient;
+export default RecipePageClient;

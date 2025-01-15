@@ -1,7 +1,7 @@
 "use client";
 
 import { useFieldArray, useForm } from "react-hook-form";
-import axio from "axios";
+import axios from "axios";
 
 //todo: try using a post request to query all current ingredients in the data base, the user can then select from this ingredients or add a new one.
 // if the user tries to add an ingredient that is already in the database, use it instead, or throw an error
@@ -43,7 +43,7 @@ const RecipeForm: React.FC = () => {
 
 	const onSubmit = async (data: RecipeFormData) => {
 		try {
-			const response = await axio.post("/api/recipes", data);
+			const response = await axios.post("/api/recipes", data);
 			console.log("recipe created", response.data);
 		} catch (error) {
 			console.error("Error creating recipe", error);

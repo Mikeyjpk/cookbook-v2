@@ -1,7 +1,9 @@
-export default function Home() {
-  return (
-    <div className="flex flex-col justify-center items-center bg-black/10">
-      Home page
-    </div>
-  );
+import { currentUser, User } from "@clerk/nextjs/server";
+import HomePageClient from "./HomePageClient";
+
+export default async function Home() {
+	//* todo: investigate how to ensure user is not undefined
+	const user = await currentUser();
+
+	return <HomePageClient userId={user!.id} />;
 }

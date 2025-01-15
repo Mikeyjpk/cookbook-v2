@@ -42,8 +42,19 @@ const RecipeForm: React.FC = () => {
 	});
 
 	const onSubmit = async (data: RecipeFormData) => {
+		// ensure order is a number before submitting
+		const stepsWithCorrectOrder = data.steps.map((step) => ({
+			...step,
+			order: Number(step.order),
+		}));
+
+		const updatedData = {
+			...data,
+			steps: stepsWithCorrectOrder,
+		};
+
 		try {
-			const response = await axios.post("/api/recipes", data);
+			const response = await axios.post("/api/recipes", updatedData);
 			console.log("recipe created", response.data);
 		} catch (error) {
 			console.error("Error creating recipe", error);

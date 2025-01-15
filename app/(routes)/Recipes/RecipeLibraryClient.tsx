@@ -3,19 +3,23 @@
 import axio from "axios";
 import { useEffect, useState } from "react";
 import RecipeCard from "@/app/components/RecipeCard";
+import { useAuth } from "@clerk/nextjs";
 
-interface RecipePageClientProps {
-	userId?: string;
-}
+// could move this out, not sure if i need props
+interface RecipeLibraryClientProps {}
 
-const RecipePageClient: React.FC<RecipePageClientProps> = ({ userId }) => {
+const RecipeLibraryClient: React.FC<RecipeLibraryClientProps> = () => {
+	const currentUser = useAuth();
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [recipes, setRecipes] = useState<any[]>([]);
 
 	const fetchRecipes = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axio.get("/api/recipes/getRecipesById");
+			const response = await axio.get(
+				"/api/recipes/getRecipesByAuthorId"
+			);
 			setRecipes(response.data);
 		} catch (error) {
 			console.error("Error fetching recipes: ", error);
@@ -37,10 +41,10 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({ userId }) => {
 				))}
 			</div>
 			<div>
-				<div>my ID is: {userId}</div>
+				<div>my ID is: {currentUser.userId}</div>
 			</div>
 		</div>
 	);
 };
 
-export default RecipePageClient;
+export default RecipeLibraryClient;

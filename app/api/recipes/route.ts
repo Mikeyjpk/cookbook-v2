@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { currentUser } from "@clerk/nextjs/server";
 
+// posts a new recipe to the database
 export async function POST(request: Request) {
 	const user = await currentUser();
 	if (!user) {
@@ -78,6 +79,7 @@ export async function POST(request: Request) {
 	}
 }
 
+// gets all recipes
 export async function GET() {
 	const recipes = await prisma.recipe.findMany({
 		include: {

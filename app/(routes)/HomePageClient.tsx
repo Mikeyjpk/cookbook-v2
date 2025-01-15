@@ -28,7 +28,7 @@ const HomePageClient: React.FC<HomePageClientProps> = () => {
 	}, []);
 	return (
 		<div className="flex flex-col gap-y-4 pt-4 bg-red-200">
-			<div className="flex justify-center text-2xl">All Recipes</div>
+			<div className="flex justify-center text-2xl">Home Page</div>
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-2 w-full">
 				{recipes.map((recipe) => (
 					<RecipeCard key={recipe.recipe_id} recipe={recipe} />

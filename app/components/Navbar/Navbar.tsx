@@ -16,7 +16,12 @@ const Navbar = () => {
 
 	return (
 		<div className="bg-red-100 flex justify-between items-center w-full h-12">
-			<button onClick={() => router.push("/")}>logo</button>
+			<button
+				className="bg-red-800/20 rounded-sm p-1"
+				onClick={() => router.push("/")}
+			>
+				Home Button
+			</button>
 			<SignedIn>
 				<div className="flex items-center  bg-red-600/30 rounded-md p-1 m-2">
 					<NavMenu

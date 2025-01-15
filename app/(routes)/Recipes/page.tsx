@@ -1,4 +1,4 @@
-import RecipePageClient from "./RecipePageClient";
+import RecipeLibraryClient from "./RecipeLibraryClient";
 import { currentUser } from "@clerk/nextjs/server";
 
 const RecipeLibraryPage = async () => {
@@ -8,7 +8,7 @@ const RecipeLibraryPage = async () => {
 		throw new Error("unauthorized access");
 	}
 
-	return <RecipePageClient userId={user?.id} />;
+	return <RecipeLibraryClient />;
 };
 
 export default RecipeLibraryPage;

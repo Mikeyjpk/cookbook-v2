@@ -33,7 +33,7 @@ const RecipeClient: React.FC<RecipeClientProps> = ({ userId }) => {
 			<div className="flex justify-center text-2xl">My Cookbook</div>
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 gap-y-2 w-full">
 				{recipes.map((recipe) => (
-					<RecipeCard key={recipe.id} recipe={recipe} />
+					<RecipeCard key={recipe.recipe_id} recipe={recipe} />
 				))}
 			</div>
 			<div>

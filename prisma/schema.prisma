@@ -13,10 +13,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type Image {
+  url         String
+  value       Int
+}
+
 model Recipe {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  author_id  String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  recipe_id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  author_id     String
+  title         String
+  description   String?    
+  prep_time     Int
+  cook_time     Int
+  ingredients   Ingredient[]
+  images        Image[]
+  steps         Step[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Step {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  order              Int
+  description        String
+  recipe             Recipe @relation(fields: [recipeId], references: [recipe_id])
+  recipeId           String @db.ObjectId
+}
+
+model Ingredient {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  description         String?
+  quantity            Float?
+  category            String?
+  unit                String?
+  recipe              Recipe? @relation(fields: [recipeId], references: [recipe_id])
+  recipeId            String? @db.ObjectId
+
+  @@index([name, category])
 }

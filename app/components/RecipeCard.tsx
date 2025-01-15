@@ -11,11 +11,11 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 
 	return (
 		<button
-			onClick={() => router.push(`/Recipes/${recipe.id}`)}
+			onClick={() => router.push(`/Recipes/${recipe.recipe_id}`)}
 			className="bg-black/10 py-4 rounded-md flex flex-col"
 		>
-			<div>{recipe.title}</div>
-			<div>{recipe.author_id}</div>
+			<div>title: {recipe.title}</div>
+			<div>{recipe.recipe_id}</div>
 		</button>
 	);
 };

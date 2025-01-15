@@ -147,10 +147,10 @@ const RecipeForm: React.FC = () => {
 							placeholder={`Description`}
 						/>
 						<input
-							{...register(`ingredients.${index}.name`, {
+							{...register(`ingredients.${index}.quantity`, {
 								required: "Quantity is required",
 							})}
-							type="text"
+							type="number"
 							placeholder={`Quantity`}
 						/>
 						<input

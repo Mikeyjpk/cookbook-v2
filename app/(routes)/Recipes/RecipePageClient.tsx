@@ -15,7 +15,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({ userId }) => {
 	const fetchRecipes = async () => {
 		try {
 			setIsLoading(true);
-			const response = await axio.get("/api/recipes");
+			const response = await axio.get("/api/recipes/getRecipesById");
 			setRecipes(response.data);
 		} catch (error) {
 			console.error("Error fetching recipes: ", error);

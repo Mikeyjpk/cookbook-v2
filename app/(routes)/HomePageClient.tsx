@@ -4,11 +4,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
 
-interface HomePageClientProps {
-	userId: string;
-}
+// todo, remove this if not being used, dont need to pass the id in
+interface HomePageClientProps {}
 
-const HomePageClient: React.FC<HomePageClientProps> = ({ userId }) => {
+const HomePageClient: React.FC<HomePageClientProps> = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [recipes, setRecipes] = useState<any[]>([]);
 
@@ -34,9 +33,6 @@ const HomePageClient: React.FC<HomePageClientProps> = ({ userId }) => {
 				{recipes.map((recipe) => (
 					<RecipeCard key={recipe.recipe_id} recipe={recipe} />
 				))}
-			</div>
-			<div>
-				<div>my ID is: {userId}</div>
 			</div>
 		</div>
 	);

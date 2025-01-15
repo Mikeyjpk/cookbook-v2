@@ -1,9 +1,13 @@
-import { currentUser, User } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import HomePageClient from "./HomePageClient";
 
-export default async function Home() {
-	//* todo: investigate how to ensure user is not undefined
-	const user = await currentUser();
+// todo: turn into a welcome page if the user is not signed in.
 
-	return <HomePageClient userId={user!.id} />;
+export default async function Home() {
+	const user = await currentUser();
+	if (!user) {
+		return null;
+	}
+
+	return <HomePageClient />;
 }

@@ -26,29 +26,28 @@ model Recipe {
   prep_time     Int
   cook_time     Int
   ingredients   Ingredient[]
-  images        Image[]
-  steps         Step[]
+  steps         Step[]     // Embedded inline
+  images        String?
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 }
 
-model Step {
-  id                 String @id @default(auto()) @map("_id") @db.ObjectId
-  order              Int
-  description        String
-  recipe             Recipe @relation(fields: [recipeId], references: [recipe_id])
-  recipeId           String @db.ObjectId
+type Step {
+  order        Int
+  description  String
 }
 
+
+
 model Ingredient {
-  id                  String @id @default(auto()) @map("_id") @db.ObjectId
-  name                String
-  description         String?
-  quantity            Float?
-  category            String?
-  unit                String?
-  recipe              Recipe? @relation(fields: [recipeId], references: [recipe_id])
-  recipeId            String? @db.ObjectId
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String?
+  quantity      Float?
+  category      String?
+  unit          String?
+  recipe        Recipe? @relation(fields: [recipeId], references: [recipe_id])
+  recipeId      String? @db.ObjectId
 
   @@index([name, category])
 }

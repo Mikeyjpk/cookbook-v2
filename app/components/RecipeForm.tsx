@@ -1,7 +1,8 @@
 "use client";
 
-import { useFieldArray, useForm } from "react-hook-form";
 import axios from "axios";
+import { useState } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 //todo: try using a post request to query all current ingredients in the data base, the user can then select from this ingredients or add a new one.
 // if the user tries to add an ingredient that is already in the database, use it instead, or throw an error
@@ -29,6 +30,8 @@ interface RecipeFormData {
 }
 
 const RecipeForm: React.FC = () => {
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
+
 	const {
 		register,
 		handleSubmit,
@@ -41,16 +44,30 @@ const RecipeForm: React.FC = () => {
 		},
 	});
 
-	const onSubmit = async (data: RecipeFormData) => {
-		// ensure order is a number before submitting
-		const stepsWithCorrectOrder = data.steps.map((step) => ({
-			...step,
-			order: Number(step.order),
-		}));
+	const onImageUpload = async (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const file = event.target.files?.[0];
+		if (!file) return;
 
+		const reader = new FileReader();
+		reader.onload = async () => {
+			try {
+				const response = await axios.post("/api/recipes/uploadImage", {
+					image: reader.result,
+				});
+				setImageUrl(response.data.imageUrl);
+			} catch (error) {
+				console.error("Error uploading image:", error);
+			}
+		};
+		reader.readAsDataURL(file);
+	};
+
+	const onSubmit = async (data: RecipeFormData) => {
 		const updatedData = {
 			...data,
-			steps: stepsWithCorrectOrder,
+			image: imageUrl,
 		};
 
 		try {
@@ -61,7 +78,7 @@ const RecipeForm: React.FC = () => {
 		}
 	};
 
-	// Field array for steps
+	/* Field array for steps  */
 	const {
 		fields: stepFields,
 		append: appendStep,
@@ -71,7 +88,7 @@ const RecipeForm: React.FC = () => {
 		name: "steps",
 	});
 
-	// Field array for ingredients
+	/* Field array for ingredients  */
 	const {
 		fields: ingredientFields,
 		append: appendIngredient,
@@ -96,6 +113,24 @@ const RecipeForm: React.FC = () => {
 					placeholder="Enter recipe title"
 				/>
 				{errors.title && <span>{errors.title.message}</span>}
+			</div>
+
+			{/* image upload */}
+			<div className="flex bg-red-500/20 gap-3">
+				<label htmlFor="image">Recipe Image</label>
+				<input
+					type="file"
+					id="image"
+					accept="image/*"
+					onChange={onImageUpload}
+				/>
+				{imageUrl && (
+					<img
+						src={imageUrl}
+						alt="Recipe"
+						className="w-32 h-32 object-cover"
+					/>
+				)}
 			</div>
 
 			{/* description input */}

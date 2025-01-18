@@ -11,20 +11,23 @@ interface IParams {
 
 const RecipePage = async ({ params }: { params: IParams }) => {
 	const recipe = await getRecipeById(params);
-	console.log(typeof recipe);
 	if (!recipe) {
 		console.error("Failed to get recipe");
 		return <div>Failed to find recipe</div>;
 	}
 
-	console.log(recipe);
+	console.log(recipe.image);
 
 	const user = await currentUser();
 	if (!user) {
 		return null;
 	}
 
-	return <RecipePageClient recipe={recipe} />;
+	return (
+		<div>
+			<RecipePageClient recipe={recipe} />
+		</div>
+	);
 };
 
 export default RecipePage;

@@ -38,7 +38,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({ recipe }) => {
 			</div>
 
 			{recipe.steps.map((step: any) => (
-				<div id={step.id} className="flex gap-3">
+				<div key={step.order} className="flex gap-3">
 					<div>{step.order}</div>
 					<div>{step.description}</div>
 				</div>

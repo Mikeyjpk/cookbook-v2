@@ -10,11 +10,14 @@ export default async function getRecipeById(params: IParams) {
 
 		const recipe = await prisma.recipe.findUnique({
 			where: {
-				recipe_id: recipeId,
+				recipe_id: recipeId, // Make sure this matches your schema field
 			},
 			include: {
-				steps: true,
-				ingredients: true,
+				recipeIngredients: {
+					include: {
+						ingredient: true, // Include the related ingredient details (e.g., name, description)
+					},
+				},
 			},
 		});
 

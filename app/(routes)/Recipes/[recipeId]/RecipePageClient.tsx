@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 interface RecipePageClientProps {
 	recipe: any;
 }
@@ -26,7 +24,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({ recipe }) => {
 
 			<div className="text-lg">Ingredients</div>
 			<div className="grid grid-cols-2 gap-3 text-sm">
-				{recipe.ingredients.map((ingredient: any) => (
+				{recipe.recipeIngredients.map((ingredient: any) => (
 					<div
 						key={ingredient.id}
 						className="bg-red-700/50 p-2 rounded-md"

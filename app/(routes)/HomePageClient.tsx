@@ -14,7 +14,9 @@ const HomePageClient: React.FC<HomePageClientProps> = () => {
 	const fetchRecipes = async () => {
 		try {
 			setIsLoading(true);
+
 			const response = await axios.get("/api/recipes");
+
 			setRecipes(response.data);
 		} catch (error) {
 			console.error("Error fetching recipes: ", error);
@@ -26,6 +28,7 @@ const HomePageClient: React.FC<HomePageClientProps> = () => {
 	useEffect(() => {
 		fetchRecipes();
 	}, []);
+
 	return (
 		<div className="flex flex-col gap-y-4 pt-4 bg-red-200">
 			<div className="flex justify-center text-2xl">Home Page</div>

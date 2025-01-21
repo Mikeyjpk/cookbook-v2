@@ -1,6 +1,11 @@
-import { NextResponse } from "next/server";
 import prisma from "@/app/libs/prismadb";
 import { currentUser } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+
+import {
+	getAllRecipes,
+	getRecipesByAuthorId,
+} from "@/app/api/services/recipeService";
 
 // posts a new recipe to the database
 export async function POST(request: Request) {
@@ -113,12 +118,25 @@ export async function POST(request: Request) {
 	}
 }
 
-// gets all recipes
-export async function GET() {
-	const recipes = await prisma.recipe.findMany({
-		include: {
-			recipeIngredients: true,
-		},
-	});
-	return NextResponse.json(recipes);
+export async function GET(req: Request) {
+	const { searchParams } = new URL(req.url);
+	const authorId = searchParams.get("authorId");
+
+	try {
+		let recipes;
+
+		if (authorId) {
+			recipes = await getRecipesByAuthorId(authorId); // Get recipes by author
+		} else {
+			recipes = await getAllRecipes(); // Get all recipes
+		}
+
+		return NextResponse.json(recipes);
+	} catch (error) {
+		console.error("Failed to fetch recipes:", error);
+		return NextResponse.json(
+			{ error: "Failed to fetch recipes. Please try again later." },
+			{ status: 500 }
+		);
+	}
 }

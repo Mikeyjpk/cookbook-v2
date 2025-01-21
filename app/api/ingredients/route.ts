@@ -1,8 +1,16 @@
-import prisma from "@/app/libs/prismadb"; // Adjust path if needed
+import prisma from "@/app/libs/prismadb"; // Adjust this import if necessary
 import { NextResponse } from "next/server";
 
-// gets all recipes
+// This function will handle GET requests to `/api/ingredients`
 export async function GET() {
-	const recipes = await prisma.recipe.findMany();
-	return NextResponse.json(recipes);
+	try {
+		const ingredients = await prisma.ingredient.findMany(); // Ensure you're querying the correct model (Ingredient)
+		return NextResponse.json(ingredients); // Return the list of ingredients as JSON
+	} catch (error) {
+		console.error("Error fetching ingredients:", error);
+		return NextResponse.json(
+			{ error: "Failed to fetch ingredients" },
+			{ status: 500 }
+		);
+	}
 }

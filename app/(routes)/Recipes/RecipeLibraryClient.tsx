@@ -1,6 +1,6 @@
 "use client";
 
-import axio from "axios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import RecipeCard from "@/app/components/RecipeCard";
 import { useAuth } from "@clerk/nextjs";
@@ -9,17 +9,19 @@ import { useAuth } from "@clerk/nextjs";
 interface RecipeLibraryClientProps {}
 
 const RecipeLibraryClient: React.FC<RecipeLibraryClientProps> = () => {
-	const currentUser = useAuth();
+	const { userId } = useAuth();
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [recipes, setRecipes] = useState<any[]>([]);
 
 	const fetchRecipes = async () => {
+		if (!userId) return;
+
 		try {
 			setIsLoading(true);
-			const response = await axio.get(
-				"/api/recipes/getRecipesByAuthorId"
-			);
+
+			const response = await axios.get(`/api/recipes?authorId=${userId}`);
+
 			setRecipes(response.data);
 		} catch (error) {
 			console.error("Error fetching recipes: ", error);
@@ -30,7 +32,7 @@ const RecipeLibraryClient: React.FC<RecipeLibraryClientProps> = () => {
 
 	useEffect(() => {
 		fetchRecipes();
-	}, []);
+	}, [userId]);
 
 	return (
 		<div className="flex flex-col gap-y-4 pt-4 bg-red-200">
@@ -39,9 +41,6 @@ const RecipeLibraryClient: React.FC<RecipeLibraryClientProps> = () => {
 				{recipes.map((recipe) => (
 					<RecipeCard key={recipe.recipe_id} recipe={recipe} />
 				))}
-			</div>
-			<div>
-				<div>my ID is: {currentUser.userId}</div>
 			</div>
 		</div>
 	);

@@ -36,16 +36,21 @@ const RecipeForm: React.FC = () => {
 		IngredientInput[]
 	>([]);
 
-	// Fetch existing ingredients from the API
 	useEffect(() => {
+		console.log("useEffect is running"); // Check if this appears in the console
+
 		const fetchIngredients = async () => {
 			try {
 				const response = await axios.get("/api/ingredients");
-				setExistingIngredients(response.data);
+				console.log("Fetched ingredients:", response.data); // Log to see the response
+				if (response.data) {
+					setExistingIngredients(response.data); // Set the ingredients in state
+				}
 			} catch (error) {
 				console.error("Error fetching ingredients:", error);
 			}
 		};
+
 		fetchIngredients();
 	}, []);
 
@@ -125,6 +130,7 @@ const RecipeForm: React.FC = () => {
 		name: "ingredients", // Points to the 'ingredients' field in the form data
 	});
 
+	console.log(existingIngredients);
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}

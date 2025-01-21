@@ -9,8 +9,15 @@ export async function POST(request: Request) {
 		return NextResponse.error();
 	}
 
-	const body = await request.json();
-	console.log(body);
+	let body;
+	try {
+		body = await request.json();
+	} catch (error) {
+		return NextResponse.json(
+			{ message: "Invalid request body" },
+			{ status: 400 }
+		);
+	}
 
 	const {
 		title,
@@ -22,11 +29,31 @@ export async function POST(request: Request) {
 		image,
 	} = body;
 
-	if (steps.length === 0) {
-		return NextResponse.json({
-			message: "Recipe must have at least one step.",
-			status: 400,
-		});
+	if (!title || !prep_time || !cook_time || steps.length === 0) {
+		return NextResponse.json(
+			{ message: "Missing required fields" },
+			{ status: 400 }
+		);
+	}
+
+	const prep_time_parsed = parseInt(prep_time, 10);
+	const cook_time_parsed = parseInt(cook_time, 10);
+
+	if (isNaN(prep_time_parsed) || isNaN(cook_time_parsed)) {
+		return NextResponse.json(
+			{ message: "Invalid prep_time or cook_time" },
+			{ status: 400 }
+		);
+	}
+
+	if (
+		!Array.isArray(steps) ||
+		steps.some((step) => !step.description || isNaN(parseInt(step.order)))
+	) {
+		return NextResponse.json(
+			{ message: "Invalid steps format" },
+			{ status: 400 }
+		);
 	}
 
 	// Create a new recipe object
@@ -36,26 +63,45 @@ export async function POST(request: Request) {
 			data: {
 				title,
 				description: description || null,
-				prep_time: parseInt(prep_time, 10),
-				cook_time: parseInt(cook_time, 10),
+				prep_time: prep_time_parsed,
+				cook_time: cook_time_parsed,
 				author_id: user.id,
 				image: image || null,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 				steps: steps.map((step: any) => ({
-					order: parseInt(step.order),
+					order: parseInt(step.order, 10),
 					description: step.description,
 				})),
-				ingredients: {
-					create: ingredients.map((ingredient: any) => ({
-						name: ingredient.name,
-						description: ingredient.description || "",
-						quantity: parseFloat(ingredient.quantity) || null,
-						unit: ingredient.unit || "",
-					})),
-				},
 			},
 		});
+
+		for (const ingredient of ingredients) {
+			// Check if the ingredient exists in the database
+			const existingIngredient = await prisma.ingredient.findUnique({
+				where: { name: ingredient.name },
+			});
+
+			const ingredientData =
+				existingIngredient ||
+				(await prisma.ingredient.create({
+					data: {
+						name: ingredient.name,
+						description: ingredient.description || "",
+						category: ingredient.category || "",
+					},
+				}));
+
+			// Create RecipeIngredient
+			await prisma.recipeIngredient.create({
+				data: {
+					recipeId: newRecipe.recipe_id,
+					ingredientId: ingredientData.id,
+					quantity: parseFloat(ingredient.quantity) || 0,
+					unit: ingredient.unit || "",
+				},
+			});
+		}
 
 		return NextResponse.json(newRecipe);
 	} catch (error) {
@@ -71,7 +117,7 @@ export async function POST(request: Request) {
 export async function GET() {
 	const recipes = await prisma.recipe.findMany({
 		include: {
-			ingredients: true,
+			recipeIngredients: true,
 		},
 	});
 	return NextResponse.json(recipes);

@@ -18,36 +18,46 @@ type Image {
   value       Int
 }
 
-model Recipe {
-  recipe_id     String     @id @default(auto()) @map("_id") @db.ObjectId
-  author_id     String
-  title         String
-  description   String?    
-  prep_time     Int
-  cook_time     Int
-  ingredients   Ingredient[]
-  steps         Step[]     // Embedded inline
-  images        String?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-}
-
 type Step {
   order        Int
   description  String
 }
 
+model Recipe {
+  recipe_id                 String     @id @default(auto()) @map("_id") @db.ObjectId
+  author_id                 String
+  title                     String
+  description               String?    
+  prep_time                 Int
+  cook_time                 Int
+  image                     String?
+  steps                     Step[] 
+  recipeIngredients         RecipeIngredient[]
 
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
 
 model Ingredient {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  description   String?
-  quantity      Float?
-  category      String?
-  unit          String?
-  recipe        Recipe? @relation(fields: [recipeId], references: [recipe_id])
-  recipeId      String? @db.ObjectId
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  name                String @unique
+  description         String?
+  category            String?
+  recipeIngredients   RecipeIngredient[]
 
-  @@index([name, category])
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+model RecipeIngredient {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  recipeId      String       @db.ObjectId
+  ingredientId  String       @db.ObjectId
+  quantity      Float
+  unit          String
+  recipe        Recipe       @relation(fields: [recipeId], references: [recipe_id])
+  ingredient    Ingredient   @relation(fields: [ingredientId], references: [id])
+
+  // Ensuring each recipe-ingredient pair is unique
+  @@unique([recipeId, ingredientId]) // Unique combination of recipeId and ingredientId
 }

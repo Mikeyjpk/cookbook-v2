@@ -1,18 +1,18 @@
 "use client";
 
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 
-//todo: try using a post request to query all current ingredients in the data base, the user can then select from this ingredients or add a new one.
-// if the user tries to add an ingredient that is already in the database, use it instead, or throw an error
-
+// Interface definitions
 interface StepInput {
 	order: number;
 	description: string;
 }
 
 interface IngredientInput {
+	id?: string; // Unique id (can be string or number)
 	name: string;
 	description?: string;
 	quantity?: number;
@@ -31,6 +31,23 @@ interface RecipeFormData {
 
 const RecipeForm: React.FC = () => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+	const [existingIngredients, setExistingIngredients] = useState<
+		IngredientInput[]
+	>([]);
+
+	// Fetch existing ingredients from the API
+	useEffect(() => {
+		const fetchIngredients = async () => {
+			try {
+				const response = await axios.get("/api/ingredients");
+				setExistingIngredients(response.data);
+			} catch (error) {
+				console.error("Error fetching ingredients:", error);
+			}
+		};
+		fetchIngredients();
+	}, []);
 
 	const {
 		register,
@@ -67,18 +84,28 @@ const RecipeForm: React.FC = () => {
 	const onSubmit = async (data: RecipeFormData) => {
 		const updatedData = {
 			...data,
+			prep_time: Number(data.prep_time),
+			cook_time: Number(data.cook_time),
+			ingredients: data.ingredients.map((ingredient) => ({
+				...ingredient,
+				quantity: Number(ingredient.quantity), // Ensure quantity is numeric
+			})),
 			image: imageUrl,
 		};
 
 		try {
-			const response = await axios.post("/api/recipes", updatedData);
-			console.log("recipe created", response.data);
+			const response = await axios.post("/api/recipes", updatedData, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			console.log("Recipe created:", response.data);
 		} catch (error) {
-			console.error("Error creating recipe", error);
+			console.error("Error creating recipe:", error);
 		}
 	};
 
-	/* Field array for steps  */
+	// Field array for steps
 	const {
 		fields: stepFields,
 		append: appendStep,
@@ -88,7 +115,7 @@ const RecipeForm: React.FC = () => {
 		name: "steps",
 	});
 
-	/* Field array for ingredients  */
+	// Field array for ingredients
 	const {
 		fields: ingredientFields,
 		append: appendIngredient,
@@ -178,46 +205,63 @@ const RecipeForm: React.FC = () => {
 			{/* Ingredient Inputs */}
 			<div>
 				<label>Ingredients</label>
-				{ingredientFields.map((item, index) => (
-					<div key={item.id} className="flex gap-2">
-						<input
-							{...register(`ingredients.${index}.name`, {
-								required: "Ingredient name is required",
-							})}
-							type="text"
-							placeholder={`Ingredient ${index + 1} name`}
-						/>
-						<input
-							{...register(`ingredients.${index}.description`)}
-							type="text"
-							placeholder={`Description`}
-						/>
-						<input
-							{...register(`ingredients.${index}.quantity`, {
-								required: "Quantity is required",
-							})}
-							type="number"
-							placeholder={`Quantity`}
-						/>
-						<input
-							{...register(`ingredients.${index}.unit`)}
-							type="text"
-							placeholder={`Unit (e.g., cups, grams)`}
-						/>
-						<button
-							type="button"
-							onClick={() => removeIngredient(index)}
-							className="text-red-500"
-						>
-							Remove
-						</button>
-						{errors.ingredients?.[index]?.name && (
-							<span>
-								{errors.ingredients[index].name.message}
-							</span>
-						)}
-					</div>
-				))}
+				{ingredientFields.map((item, index) => {
+					const uniqueKey = item.id || `ingredient-${index}`; // Fallback to a unique string using index
+					return (
+						<div key={uniqueKey} className="flex gap-2">
+							{/* Input for ingredient name */}
+							<input
+								list={`ingredient-options-${index}`} // Binding to the corresponding datalist
+								{...register(`ingredients.${index}.name`, {
+									required: "Ingredient is required",
+								})}
+								placeholder="Type or select an ingredient"
+							/>
+
+							{/* Datalist for existing ingredients */}
+							<datalist id={`ingredient-options-${index}`}>
+								{existingIngredients.map((ingredient) => (
+									<option
+										key={ingredient.id || uuidv4()} // Ensuring each option has a unique key
+										value={ingredient.name} // Displaying the ingredient name in the input
+									>
+										{ingredient.name}
+									</option>
+								))}
+							</datalist>
+
+							{/* Input for quantity */}
+							<input
+								{...register(`ingredients.${index}.quantity`, {
+									required: "Quantity is required",
+									valueAsNumber: true, // Ensure the value is treated as a number
+								})}
+								type="number"
+								placeholder="Quantity"
+								step="any" // Allows any decimal value (e.g., 0.5, 1.25)
+								min="0" // Optional: Ensures the quantity cannot be negative
+							/>
+
+							{/* Input for unit */}
+							<input
+								{...register(`ingredients.${index}.unit`)}
+								type="text"
+								placeholder="Unit"
+							/>
+
+							{/* Remove ingredient button */}
+							<button
+								type="button"
+								onClick={() => removeIngredient(index)}
+								className="text-red-500"
+							>
+								Remove
+							</button>
+						</div>
+					);
+				})}
+
+				{/* Add ingredient button */}
 				<button
 					type="button"
 					onClick={() =>
@@ -228,11 +272,10 @@ const RecipeForm: React.FC = () => {
 				</button>
 			</div>
 
-			{/* Step Inputs */}
 			<div>
 				<label>Steps</label>
 				{stepFields.map((item, index) => (
-					<div key={item.id} className="flex gap-2">
+					<div key={`${item.order}-${index}`} className="flex gap-2">
 						<input
 							{...register(`steps.${index}.order`)}
 							type="number"
@@ -261,6 +304,7 @@ const RecipeForm: React.FC = () => {
 						)}
 					</div>
 				))}
+
 				<button
 					type="button"
 					onClick={() =>

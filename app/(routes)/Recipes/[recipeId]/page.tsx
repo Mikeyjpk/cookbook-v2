@@ -7,7 +7,7 @@ interface IParams {
 }
 
 const RecipePage = async ({ params }: { params: IParams }) => {
-	const { recipeId } = params;
+	const { recipeId } = await params;
 	const recipe = await getRecipeById(recipeId);
 	if (!recipe) {
 		console.error("Failed to get recipe");
@@ -21,7 +21,7 @@ const RecipePage = async ({ params }: { params: IParams }) => {
 
 	return (
 		<div>
-			<RecipePageClient recipe={recipe} />
+			<RecipePageClient recipe={recipe} currentUser={user.id} />
 		</div>
 	);
 };

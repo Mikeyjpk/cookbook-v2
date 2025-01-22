@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 
@@ -29,30 +29,13 @@ interface RecipeFormData {
 	fields?: Record<string, any>;
 }
 
-const RecipeForm: React.FC = () => {
+interface RecipeFormProps {
+	existingIngredients: any[];
+}
+
+const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-	const [existingIngredients, setExistingIngredients] = useState<
-		IngredientInput[]
-	>([]);
-
-	useEffect(() => {
-		console.log("useEffect is running"); // Check if this appears in the console
-
-		const fetchIngredients = async () => {
-			try {
-				const response = await axios.get("/api/ingredients");
-				console.log("Fetched ingredients:", response.data); // Log to see the response
-				if (response.data) {
-					setExistingIngredients(response.data); // Set the ingredients in state
-				}
-			} catch (error) {
-				console.error("Error fetching ingredients:", error);
-			}
-		};
-
-		fetchIngredients();
-	}, []);
+	const [isloading, setIsLoading] = useState(false);
 
 	const {
 		register,
@@ -62,7 +45,7 @@ const RecipeForm: React.FC = () => {
 	} = useForm<RecipeFormData>({
 		defaultValues: {
 			steps: [{ order: 1, description: "" }],
-			ingredients: [{ name: "", quantity: 0, unit: "" }],
+			ingredients: [{ name: "", quantity: 1, unit: "" }],
 		},
 	});
 
@@ -130,7 +113,6 @@ const RecipeForm: React.FC = () => {
 		name: "ingredients", // Points to the 'ingredients' field in the form data
 	});
 
-	console.log(existingIngredients);
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -221,18 +203,16 @@ const RecipeForm: React.FC = () => {
 								{...register(`ingredients.${index}.name`, {
 									required: "Ingredient is required",
 								})}
-								placeholder="Type or select an ingredient"
+								placeholder="Type to select an ingredient"
 							/>
 
 							{/* Datalist for existing ingredients */}
 							<datalist id={`ingredient-options-${index}`}>
 								{existingIngredients.map((ingredient) => (
 									<option
-										key={ingredient.id || uuidv4()} // Ensuring each option has a unique key
-										value={ingredient.name} // Displaying the ingredient name in the input
-									>
-										{ingredient.name}
-									</option>
+										key={ingredient.id || uuidv4()}
+										value={ingredient.name}
+									/>
 								))}
 							</datalist>
 

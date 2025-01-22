@@ -51,13 +51,13 @@ model Ingredient {
 
 model RecipeIngredient {
   id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  recipeId      String?      @db.ObjectId // Allow recipeId to be nullable
+  recipeId      String       @db.ObjectId
   ingredientId  String       @db.ObjectId
   quantity      Float
   unit          String
-  recipe        Recipe?      @relation(fields: [recipeId], references: [recipe_id], onDelete: SetNull) // Prevent deletion of RecipeIngredients when Recipe is deleted
+  recipe        Recipe       @relation(fields: [recipeId], references: [recipe_id], onDelete: Cascade) // Automatically delete RecipeIngredients
   ingredient    Ingredient   @relation(fields: [ingredientId], references: [id])
 
-  // Ensuring each recipe-ingredient pair is unique
   @@unique([recipeId, ingredientId]) // Unique combination of recipeId and ingredientId
 }
+

@@ -31,13 +31,18 @@ export const getRecipeById = async (id: string) => {
 	});
 };
 
-export const deleteRecipeById = async (id: string) => {
+export async function deleteRecipeById(recipeId: string) {
 	try {
-		return await prisma.recipe.delete({
-			where: { recipe_id: id },
+		// Delete the recipe; cascading deletes RecipeIngredients
+		await prisma.recipe.delete({
+			where: {
+				recipe_id: recipeId,
+			},
 		});
+
+		return { success: true };
 	} catch (error) {
-		console.error("Error in deleting recipe:", error);
-		throw error;
+		console.error("Error in deleteRecipeById:", error);
+		throw new Error("Failed to delete recipe");
 	}
-};
+}

@@ -32,18 +32,46 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	{ params }: { params: { id: string } }
+	context: { params: { id: string } }
 ) {
-	const { id } = params;
+	const { params } = context;
+
+	if (!params?.id) {
+		return NextResponse.json(
+			{ error: "Recipe ID is required" },
+			{ status: 400 }
+		);
+	}
 
 	try {
-		// Delete the recipe but retain its associated RecipeIngredients
+		const { id } = await params;
+
+		if (!id.match(/^[a-fA-F0-9]{24}$/)) {
+			return NextResponse.json(
+				{ error: "Invalid Recipe ID format" },
+				{ status: 400 }
+			);
+		}
+
+		// Check if the recipe exists
+		const recipe = await getRecipeById(id);
+
+		if (!recipe) {
+			return NextResponse.json(
+				{ error: "Recipe not found" },
+				{ status: 404 }
+			);
+		}
+
+		// Delete the recipe (and related RecipeIngredients)
 		await deleteRecipeById(id);
+
 		return NextResponse.json({ message: "Recipe deleted successfully" });
-	} catch (error) {
+	} catch (error: any) {
 		console.error("Error deleting recipe:", error);
+
 		return NextResponse.json(
-			{ message: "Failed to delete recipe" },
+			{ error: error.message || "Failed to delete recipe" },
 			{ status: 500 }
 		);
 	}

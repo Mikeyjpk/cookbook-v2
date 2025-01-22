@@ -82,16 +82,21 @@ export async function POST(request: Request) {
 		});
 
 		for (const ingredient of ingredients) {
+			// ensure the database only accepts lowercase
+			const normalizedIngredientName = ingredient.name
+				.trim()
+				.toLowerCase();
+
 			// Check if the ingredient exists in the database
 			const existingIngredient = await prisma.ingredient.findUnique({
-				where: { name: ingredient.name },
+				where: { name: normalizedIngredientName },
 			});
 
 			const ingredientData =
 				existingIngredient ||
 				(await prisma.ingredient.create({
 					data: {
-						name: ingredient.name,
+						name: normalizedIngredientName,
 						description: ingredient.description || "",
 						category: ingredient.category || "",
 					},

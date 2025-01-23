@@ -82,10 +82,11 @@ export async function POST(request: Request) {
 		});
 
 		for (const ingredient of ingredients) {
-			// ensure the database only accepts lowercase
+			// Normalize ingredient name: lowercase, trim, and remove trailing 's' if present (except for 'ss').
 			const normalizedIngredientName = ingredient.name
 				.trim()
-				.toLowerCase();
+				.toLowerCase()
+				.replace(/(?<!s)s$/, ""); // Remove trailing 's' unless it's preceded by 's'
 
 			// Check if the ingredient exists in the database
 			const existingIngredient = await prisma.ingredient.findUnique({

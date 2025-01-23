@@ -39,6 +39,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 
 	return (
 		<div className="flex flex-col gap-2">
+			{/* Delete Button */}
 			{isAuthor && (
 				<div>
 					<button
@@ -49,8 +50,11 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 					</button>
 				</div>
 			)}
+
+			{/* Recipe Title */}
 			<div className="text-2xl font-semi-bold">{recipe.title}</div>
 
+			{/* Image */}
 			<div className="flex items-center justify-center">
 				<div className="max-h-[500px] overflow-hidden rounded-md md:rounded-xl">
 					<img
@@ -60,10 +64,14 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 				</div>
 			</div>
 
+			{/* Description */}
 			<div className="text-sm font-thin">{recipe.description}</div>
+
+			{/* Times */}
 			<div>Prep time: {recipe.prep_time}</div>
 			<div>Cook Time: {recipe.cook_time}</div>
 
+			{/* Ingredients */}
 			<div className="text-lg">Ingredients</div>
 			<div className="grid grid-cols-2 gap-3 text-sm">
 				{recipe.recipeIngredients.map((ingredient: any) => (
@@ -77,6 +85,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 				))}
 			</div>
 
+			{/* Steps */}
 			{recipe.steps.map((step: any) => (
 				<div key={step.order} className="flex gap-3">
 					<div>{step.order}</div>

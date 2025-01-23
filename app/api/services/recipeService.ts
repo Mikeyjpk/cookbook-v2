@@ -27,7 +27,13 @@ export const getRecipesByAuthorId = async (authorId: string) => {
 export const getRecipeById = async (id: string) => {
 	return prisma.recipe.findUnique({
 		where: { recipe_id: id },
-		include: { recipeIngredients: true },
+		include: {
+			recipeIngredients: {
+				include: {
+					ingredient: true,
+				},
+			},
+		},
 	});
 };
 

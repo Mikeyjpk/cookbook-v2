@@ -74,13 +74,15 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 			{/* Ingredients */}
 			<div className="text-lg">Ingredients</div>
 			<div className="grid grid-cols-2 gap-3 text-sm">
-				{recipe.recipeIngredients.map((ingredient: any) => (
+				{recipe.recipeIngredients.map((recipeIngredient: any) => (
 					<div
-						key={ingredient.id}
+						key={recipeIngredient.id}
 						className="bg-red-700/50 p-2 rounded-md"
 					>
-						<div>Ingredient: {ingredient.name}</div>
-						<div>Quantity: {ingredient.quantity}</div>
+						<div>
+							Ingredient: {recipeIngredient.ingredient.name}
+						</div>
+						<div>Quantity: {recipeIngredient.quantity}</div>
 					</div>
 				))}
 			</div>

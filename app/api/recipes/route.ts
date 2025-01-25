@@ -33,6 +33,9 @@ export async function POST(request: Request) {
 		ingredients = [],
 		categories = [],
 		image,
+		isPrivate,
+		servings,
+		difficulty,
 	} = body;
 
 	console.log(body);
@@ -73,10 +76,14 @@ export async function POST(request: Request) {
 			data: {
 				title,
 				description: description || null,
+				difficulty: difficulty,
+				isPrivate: isPrivate,
+				servings: servings,
 				prep_time: prep_time_parsed,
 				cook_time: cook_time_parsed,
 				categories: categoryStrings,
 				author_id: user.id,
+				author_name: user.firstName || "anon",
 				image: image || null,
 				createdAt: new Date(),
 				updatedAt: new Date(),

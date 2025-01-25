@@ -65,7 +65,6 @@ export async function POST(request: Request) {
 	}
 
 	const categoryStrings = categories.map((category: any) => category.name);
-	console.log(categoryStrings);
 
 	// Create a new recipe object
 	try {

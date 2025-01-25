@@ -32,7 +32,9 @@ interface RecipeFormData {
 	steps: StepInput[];
 	ingredients: IngredientInput[];
 	categories: CategoryField[];
-	// fields?: Record<string, any>;
+	isPrivate: boolean;
+	difficulty: string;
+	servings: number;
 }
 
 interface RecipeFormProps {
@@ -56,6 +58,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 			steps: [{ order: 1, description: "" }],
 			ingredients: [{ name: "", quantity: 1, unit: "" }],
 			categories: [],
+			isPrivate: false,
+			servings: 1,
 		},
 	});
 
@@ -79,6 +83,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		name: "ingredients", // Points to the 'ingredients' field in the form data
 	});
 
+	// Feild array for categories
 	const {
 		fields: categoryFields,
 		append,
@@ -153,7 +158,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 				/>
 				{errors.title && <span>{errors.title.message}</span>}
 			</div>
-
 			{/* image upload */}
 			<div className="flex bg-red-500/20 gap-3">
 				<label htmlFor="image">Recipe Image</label>
@@ -171,7 +175,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					/>
 				)}
 			</div>
-
 			{/* description input */}
 			<div>
 				<label htmlFor="description">Description</label>
@@ -185,7 +188,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					<span>{errors.description.message}</span>
 				)}
 			</div>
-
 			{/* prep time */}
 			<div>
 				<label htmlFor="prep_time">Prep Time</label>
@@ -199,7 +201,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 				/>
 				{errors.prep_time && <span>{errors.prep_time.message}</span>}
 			</div>
-
 			{/* cook time */}
 			<div>
 				<label htmlFor="cook_time">Cook Time</label>
@@ -213,7 +214,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 				/>
 				{errors.cook_time && <span>{errors.cook_time.message}</span>}
 			</div>
-
 			{/* Categories */}
 			<div>
 				<label>Categories</label>
@@ -274,6 +274,84 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 						</li>
 					))}
 				</ul>
+			</div>
+			{/* PRIVACY TOGGLE */}
+			<div>
+				<label className="inline-flex items-center">
+					<span>Check to make recipe private</span>
+					<input
+						type="checkbox"
+						{...register("isPrivate")}
+						// It's already false by default, so un-checked means public
+					/>
+				</label>
+			</div>
+			{/* DIFFICULTY RADIO BUTTONS */}
+			<div>
+				<label className="block font-semibold">Difficulty</label>
+				<div className="flex gap-2 mt-1">
+					{/* Radio for 'beginner' */}
+					<label className="flex items-center gap-1">
+						<input
+							type="radio"
+							value="beginner"
+							{...register("difficulty", { required: true })}
+						/>
+						Beginner
+					</label>
+
+					{/* Radio for 'easy' */}
+					<label className="flex items-center gap-1">
+						<input
+							type="radio"
+							value="easy"
+							{...register("difficulty")}
+						/>
+						Easy
+					</label>
+
+					{/* Radio for 'medium' */}
+					<label className="flex items-center gap-1">
+						<input
+							type="radio"
+							value="medium"
+							{...register("difficulty")}
+						/>
+						Medium
+					</label>
+
+					{/* Radio for 'difficult' */}
+					<label className="flex items-center gap-1">
+						<input
+							type="radio"
+							value="difficult"
+							{...register("difficulty")}
+						/>
+						Difficult
+					</label>
+				</div>
+			</div>
+
+			{/* SERVINGS INPUT  */}
+			<div>
+				<label className="block font-semibold" htmlFor="servings">
+					Serves
+				</label>
+				<input
+					id="servings"
+					type="number"
+					min={1}
+					{...register("servings", {
+						required: "Please specify how many servings",
+						valueAsNumber: true,
+					})}
+					className="border rounded p-1 w-32"
+				/>
+				{errors.servings && (
+					<p className="text-red-500 text-sm">
+						{errors.servings.message}
+					</p>
+				)}
 			</div>
 
 			{/* Ingredient Inputs */}
@@ -343,7 +421,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					Add Ingredient
 				</button>
 			</div>
-
 			<div>
 				<label>Steps</label>
 				{stepFields.map((item, index) => (
@@ -389,7 +466,6 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					Add Step
 				</button>
 			</div>
-
 			<button type="submit">Submit</button>
 		</form>
 	);

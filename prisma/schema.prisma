@@ -23,6 +23,7 @@ type Step {
   description  String
 }
 
+
 model Recipe {
   recipe_id                 String     @id @default(auto()) @map("_id") @db.ObjectId
   author_id                 String
@@ -31,6 +32,7 @@ model Recipe {
   prep_time                 Int
   cook_time                 Int
   image                     String?
+  categories                String[]
   steps                     Step[] 
   recipeIngredients         RecipeIngredient[]
 

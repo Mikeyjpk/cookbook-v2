@@ -4,8 +4,13 @@ import axios from "axios";
 import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
+import { categoryLookup } from "@/app/utilities/categoryLookup";
 
 // Interface definitions
+
+interface CategoryField {
+	name: string;
+}
 interface StepInput {
 	order: number;
 	description: string;
@@ -26,15 +31,19 @@ interface RecipeFormData {
 	cook_time: number;
 	steps: StepInput[];
 	ingredients: IngredientInput[];
-	fields?: Record<string, any>;
+	categories: CategoryField[];
+	// fields?: Record<string, any>;
 }
 
 interface RecipeFormProps {
 	existingIngredients: any[];
 }
 
+const categoryOptions = Object.values(categoryLookup);
+
 const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null);
+	const [tempCategory, setTempCategory] = useState("");
 	const [isloading, setIsLoading] = useState(false);
 
 	const {
@@ -46,7 +55,37 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		defaultValues: {
 			steps: [{ order: 1, description: "" }],
 			ingredients: [{ name: "", quantity: 1, unit: "" }],
+			categories: [],
 		},
+	});
+
+	// Field array for steps
+	const {
+		fields: stepFields,
+		append: appendStep,
+		remove: removeStep,
+	} = useFieldArray({
+		control,
+		name: "steps",
+	});
+
+	// Field array for ingredients
+	const {
+		fields: ingredientFields,
+		append: appendIngredient,
+		remove: removeIngredient,
+	} = useFieldArray({
+		control,
+		name: "ingredients", // Points to the 'ingredients' field in the form data
+	});
+
+	const {
+		fields: categoryFields,
+		append,
+		remove,
+	} = useFieldArray({
+		control,
+		name: "categories",
 	});
 
 	const onImageUpload = async (
@@ -93,25 +132,10 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		}
 	};
 
-	// Field array for steps
-	const {
-		fields: stepFields,
-		append: appendStep,
-		remove: removeStep,
-	} = useFieldArray({
-		control,
-		name: "steps",
-	});
-
-	// Field array for ingredients
-	const {
-		fields: ingredientFields,
-		append: appendIngredient,
-		remove: removeIngredient,
-	} = useFieldArray({
-		control,
-		name: "ingredients", // Points to the 'ingredients' field in the form data
-	});
+	// Helper: Check if user typed an exact match from categoryOptions
+	const isValidCategory = (cat: string) => {
+		return categoryOptions.includes(cat);
+	};
 
 	return (
 		<form
@@ -188,6 +212,68 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					placeholder="Cook time in minutes"
 				/>
 				{errors.cook_time && <span>{errors.cook_time.message}</span>}
+			</div>
+
+			{/* Categories */}
+			<div>
+				<label>Categories</label>
+				<div
+					style={{
+						display: "flex",
+						gap: "0.5rem",
+						marginTop: "0.5rem",
+					}}
+				>
+					<input
+						type="text"
+						list="category-list"
+						placeholder="Select a category"
+						value={tempCategory}
+						onChange={(e) => setTempCategory(e.target.value)}
+					/>
+					<datalist id="category-list">
+						{categoryOptions.map((cat) => (
+							<option key={cat} value={cat} />
+						))}
+					</datalist>
+					<button
+						type="button"
+						onClick={() => {
+							// Only append if user typed a valid category
+							const trimmed = tempCategory.trim();
+							if (isValidCategory(trimmed)) {
+								append({ name: trimmed });
+								setTempCategory("");
+							} else {
+								alert(
+									"Please select a category from the list."
+								);
+							}
+						}}
+					>
+						+ Add Category
+					</button>
+				</div>
+
+				{/* Render already-added categories */}
+				<ul style={{ marginTop: "1rem" }}>
+					{categoryFields.map((field, index) => (
+						<li
+							key={field.id}
+							style={{ display: "flex", gap: "1rem" }}
+						>
+							<input
+								{...register(
+									`categories.${index}.name` as const
+								)}
+								readOnly
+							/>
+							<button type="button" onClick={() => remove(index)}>
+								Remove
+							</button>
+						</li>
+					))}
+				</ul>
 			</div>
 
 			{/* Ingredient Inputs */}

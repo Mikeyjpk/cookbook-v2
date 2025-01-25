@@ -31,8 +31,11 @@ export async function POST(request: Request) {
 		cook_time,
 		steps = [],
 		ingredients = [],
+		categories = [],
 		image,
 	} = body;
+
+	console.log(body);
 
 	if (!title || !prep_time || !cook_time || steps.length === 0) {
 		return NextResponse.json(
@@ -61,6 +64,9 @@ export async function POST(request: Request) {
 		);
 	}
 
+	const categoryStrings = categories.map((category: any) => category.name);
+	console.log(categoryStrings);
+
 	// Create a new recipe object
 	try {
 		// todo: add user name to the recipe
@@ -70,6 +76,7 @@ export async function POST(request: Request) {
 				description: description || null,
 				prep_time: prep_time_parsed,
 				cook_time: cook_time_parsed,
+				categories: categoryStrings,
 				author_id: user.id,
 				image: image || null,
 				createdAt: new Date(),

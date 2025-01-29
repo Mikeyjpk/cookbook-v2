@@ -15,15 +15,14 @@ const Navbar = () => {
 	}, []);
 
 	return (
-		<div className="bg-red-100 flex justify-between items-center w-full h-12">
-			<button
-				className="bg-red-800/20 rounded-sm p-1"
-				onClick={() => router.push("/")}
-			>
+		<div
+			className={`" flex justify-between items-center w-full h-12 bg-primary`}
+		>
+			<button className="rounded-sm p-1" onClick={() => router.push("/")}>
 				Home Button
 			</button>
 			<SignedIn>
-				<div className="flex items-center  bg-red-600/30 rounded-md p-1 m-2">
+				<div className="flex items-center rounded-lg p-1 m-2 border-[1px] border-secondary">
 					<NavMenu
 						isOpen={showNavMenu}
 						toggleOpen={handleToggleOpen}

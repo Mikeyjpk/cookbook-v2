@@ -2,6 +2,8 @@
 import RecipeForm from "@/app/components/RecipeForm";
 import axios from "axios";
 
+import CreatePageHeader from "./components/CreatePageHeader";
+
 // Define the type for a single ingredient
 interface Ingredient {
 	id: string;
@@ -14,6 +16,7 @@ interface Ingredient {
 
 // This is a Server Component that fetches ingredients from the server
 const CreatePage = async () => {
+	// todo: this may be spamming requests, try moving this into a client file
 	let existingIngredients: Ingredient[] = [];
 
 	try {
@@ -27,8 +30,8 @@ const CreatePage = async () => {
 	}
 
 	return (
-		<div>
-			<div>Add Recipe</div>
+		<div className="flex flex-col">
+			<CreatePageHeader />
 			<RecipeForm existingIngredients={existingIngredients} />
 		</div>
 	);

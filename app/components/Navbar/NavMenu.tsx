@@ -11,7 +11,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 		<div className="relative">
 			<button
 				onClick={toggleOpen}
-				className="flex justify-center items-center mr-2"
+				className="flex justify-center items-center mr-2 text-secondary"
 			>
 				{isOpen ? <TbMenu3 size={22} /> : <TbMenu4 size={22} />}
 			</button>

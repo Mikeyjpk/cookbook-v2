@@ -1,4 +1,4 @@
-import prisma from "@/app/libs/prismadb"; // Adjust this import if necessary
+import prisma from "@/lib/prismadb"; // Adjust this import if necessary
 import { NextResponse } from "next/server";
 
 // This function will handle GET requests to `/api/ingredients`

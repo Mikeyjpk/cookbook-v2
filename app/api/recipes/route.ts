@@ -1,4 +1,4 @@
-import prisma from "@/app/libs/prismadb";
+import prisma from "@/lib/prismadb";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -37,8 +37,6 @@ export async function POST(request: Request) {
 		servings,
 		difficulty,
 	} = body;
-
-	console.log(body);
 
 	if (!title || !prep_time || !cook_time || steps.length === 0) {
 		return NextResponse.json(

@@ -1,10 +1,4 @@
-import {
-	ClerkProvider,
-	SignInButton,
-	SignedIn,
-	SignedOut,
-	UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -12,6 +6,7 @@ import AppContainer from "./components/Containers/AppContainer";
 
 import "./globals.css";
 import Navbar from "./components/Navbar/Navbar";
+import ContentContainer from "./components/Containers/ContentContainer";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -37,19 +32,11 @@ export default function RootLayout({
 		<ClerkProvider>
 			<html lang="en">
 				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased bg-red-500/10`}
+					className={`${geistSans.variable} ${geistMono.variable} antialiased bg-light`}
 				>
 					<AppContainer>
-						{/* <header>
-							<SignedOut>
-								<SignInButton />
-							</SignedOut>
-							<SignedIn>
-								<UserButton />
-							</SignedIn>
-						</header> */}
 						<Navbar />
-						{children}
+						<ContentContainer>{children}</ContentContainer>
 					</AppContainer>
 				</body>
 			</html>

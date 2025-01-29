@@ -1,4 +1,4 @@
-import prisma from "@/app/libs/prismadb";
+import prisma from "@/lib/prismadb";
 
 /**
  * Fetch all recipes in the database.

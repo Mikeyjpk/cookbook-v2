@@ -2,12 +2,17 @@
 
 import axios from "axios";
 import { useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useController } from "react-hook-form";
+import { Switch } from "@/components/ui/switch";
 import { v4 as uuidv4 } from "uuid";
 import { categoryLookup } from "@/app/utilities/categoryLookup";
 
-// Interface definitions
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RiDeleteBin2Fill } from "react-icons/ri";
+import { MdAdd } from "react-icons/md";
 
+// Interface definitions
 interface CategoryField {
 	name: string;
 }
@@ -53,6 +58,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		handleSubmit,
 		control,
 		formState: { errors },
+		watch,
+		setValue,
 	} = useForm<RecipeFormData>({
 		defaultValues: {
 			steps: [{ order: 1, description: "" }],
@@ -62,6 +69,9 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 			servings: 1,
 		},
 	});
+
+	// watch difficulty todo: add an image to display on different pick
+	const selectedDifficulty = watch("difficulty");
 
 	// Field array for steps
 	const {
@@ -96,6 +106,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 	const onImageUpload = async (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
+		setIsLoading(true);
 		const file = event.target.files?.[0];
 		if (!file) return;
 
@@ -111,6 +122,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 			}
 		};
 		reader.readAsDataURL(file);
+		setIsLoading(false);
 	};
 
 	const onSubmit = async (data: RecipeFormData) => {
@@ -143,87 +155,117 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="bg-black/50 flex flex-col gap-3"
-		>
+		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
 			{/* title input */}
-			<div>
-				<label htmlFor="title">Title</label>
+			<div className="flex relative">
 				<input
-					{...register("title", { required: "Title is required" })}
+					{...register("title", {
+						required: "Title is required",
+					})}
 					id="title"
 					type="text"
-					placeholder="Enter recipe title"
+					placeholder=" Enter recipe title"
+					className="w-full h-10 border-[1.5px] border-secondary/60 rounded-md"
 				/>
-				{errors.title && <span>{errors.title.message}</span>}
-			</div>
-			{/* image upload */}
-			<div className="flex bg-red-500/20 gap-3">
-				<label htmlFor="image">Recipe Image</label>
-				<input
-					type="file"
-					id="image"
-					accept="image/*"
-					onChange={onImageUpload}
-				/>
-				{imageUrl && (
-					<img
-						src={imageUrl}
-						alt="Recipe"
-						className="w-32 h-32 object-cover"
-					/>
+				{errors.title && (
+					<span className="text-danger flex justify-center absolute right-4 top-1.5">
+						{errors.title.message}
+					</span>
 				)}
 			</div>
+
+			{/* todo: add button to remove the image & delete from cloudinary */}
+			{/* image upload */}
+			<div className="flex bg-primary/20 w-full h-60 rounded-lg justify-center items-center">
+				{imageUrl ? (
+					<>
+						<img
+							src={imageUrl}
+							alt="Recipe"
+							className="w-auto h-52 object-cover rounded-lg"
+						/>
+					</>
+				) : (
+					<div className="flex flex-col items-center justify-center gap-6 border-2 border-secondary/70 border-dashed rounded-lg w-11/12 h-5/6">
+						<div className="text-sm text-dark/70 font-semibold">
+							Upload an image for your recipe
+						</div>
+
+						<label
+							htmlFor="image"
+							className="flex justify-center items-center rounded-full bg-secondary w-24 h-10 text-light hover:cursor-pointer"
+						>
+							Browse
+						</label>
+
+						<input
+							type="file"
+							id="image"
+							accept="image/*"
+							onChange={onImageUpload}
+							className="hidden"
+						/>
+					</div>
+				)}
+			</div>
+
+			{/* Time Inputs */}
+			<div className="flex justify-evenly gap-3">
+				{/* prep time */}
+				<div className="flex flex-col">
+					<input
+						{...register("prep_time", {
+							required: "Required",
+						})}
+						id="prep_time"
+						type="text"
+						placeholder=" Prep time (minutes)"
+						className="w-full h-10 border-[1.5px] border-secondary/60 rounded-md"
+					/>
+					{errors.prep_time && (
+						<span className="text-danger flex justify-center">
+							{errors.prep_time.message}
+						</span>
+					)}
+				</div>
+
+				{/* cook time */}
+				<div className="flex flex-col">
+					<input
+						{...register("cook_time", {
+							required: "Required",
+						})}
+						id="cook_time"
+						type="text"
+						placeholder=" Cook time (minutes)"
+						className="w-full h-10 border-[1.5px] border-secondary/60 rounded-md"
+					/>
+					{errors.cook_time && (
+						<span className="text-danger flex justify-center">
+							{errors.cook_time.message}
+						</span>
+					)}
+				</div>
+			</div>
+
 			{/* description input */}
 			<div>
-				<label htmlFor="description">Description</label>
-				<input
+				<textarea
 					{...register("description")}
 					id="description"
-					type="text"
-					placeholder="Enter recipe description"
+					placeholder=" Enter recipe description"
+					className="w-full h-28 border-[1.5px] border-secondary/60 rounded-md"
 				/>
 				{errors.description && (
 					<span>{errors.description.message}</span>
 				)}
 			</div>
-			{/* prep time */}
-			<div>
-				<label htmlFor="prep_time">Prep Time</label>
-				<input
-					{...register("prep_time", {
-						required: "Required",
-					})}
-					id="prep_time"
-					type="text"
-					placeholder="Prep time in minutes"
-				/>
-				{errors.prep_time && <span>{errors.prep_time.message}</span>}
-			</div>
-			{/* cook time */}
-			<div>
-				<label htmlFor="cook_time">Cook Time</label>
-				<input
-					{...register("cook_time", {
-						required: "Required",
-					})}
-					id="cook_time"
-					type="text"
-					placeholder="Cook time in minutes"
-				/>
-				{errors.cook_time && <span>{errors.cook_time.message}</span>}
-			</div>
+
+			{/* make this a model pop up, button that opens the model */}
 			{/* Categories */}
 			<div>
 				<label>Categories</label>
-				<div
-					style={{
-						display: "flex",
-						gap: "0.5rem",
-						marginTop: "0.5rem",
-					}}
-				>
+				<div>
 					<input
 						type="text"
 						list="category-list"
@@ -275,68 +317,71 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 					))}
 				</ul>
 			</div>
-			{/* PRIVACY TOGGLE */}
-			<div>
-				<label className="inline-flex items-center">
-					<span>Check to make recipe private</span>
-					<input
-						type="checkbox"
-						{...register("isPrivate")}
-						// It's already false by default, so un-checked means public
-					/>
+
+			{/* PRIVACY TOGGLE (ShadCN) */}
+			<div className="flex items-center gap-2">
+				<label htmlFor="isPrivate" className="text-lg font-medium">
+					Secret Recipe
 				</label>
-			</div>
-			{/* DIFFICULTY RADIO BUTTONS */}
-			<div>
-				<label className="block font-semibold">Difficulty</label>
-				<div className="flex gap-2 mt-1">
-					{/* Radio for 'beginner' */}
-					<label className="flex items-center gap-1">
-						<input
-							type="radio"
-							value="beginner"
-							{...register("difficulty", { required: true })}
-						/>
-						Beginner
-					</label>
-
-					{/* Radio for 'easy' */}
-					<label className="flex items-center gap-1">
-						<input
-							type="radio"
-							value="easy"
-							{...register("difficulty")}
-						/>
-						Easy
-					</label>
-
-					{/* Radio for 'medium' */}
-					<label className="flex items-center gap-1">
-						<input
-							type="radio"
-							value="medium"
-							{...register("difficulty")}
-						/>
-						Medium
-					</label>
-
-					{/* Radio for 'difficult' */}
-					<label className="flex items-center gap-1">
-						<input
-							type="radio"
-							value="difficult"
-							{...register("difficulty")}
-						/>
-						Difficult
-					</label>
+				<Switch
+					id="isPrivate"
+					checked={watch("isPrivate")}
+					onCheckedChange={(checked) =>
+						setValue("isPrivate", checked)
+					}
+				/>
+				<div className="text-xs text-primary/80">
+					make this recipe just for you!
 				</div>
+			</div>
+
+			{/* DIFFICULTY RADIO BUTTONS (ShadCN) */}
+			<div>
+				<Label className="block text-lg pb-3">Difficulty</Label>
+				<RadioGroup
+					defaultValue={watch("difficulty")}
+					onValueChange={(value) => setValue("difficulty", value)}
+					className="flex flex-col gap-3 hover:cursor-pointer mx-1"
+				>
+					<div className="flex items-center space-x-2">
+						<RadioGroupItem value="beginner" id="beginner" />
+						<Label
+							htmlFor="beginner"
+							className="hover:cursor-pointer"
+						>
+							Beginner
+						</Label>
+					</div>
+					<div className="flex items-center space-x-2">
+						<RadioGroupItem value="easy" id="easy" />
+						<Label htmlFor="easy" className="hover:cursor-pointer">
+							Easy
+						</Label>
+					</div>
+					<div className="flex items-center space-x-2">
+						<RadioGroupItem value="medium" id="medium" />
+						<Label
+							htmlFor="medium"
+							className="hover:cursor-pointer"
+						>
+							Medium
+						</Label>
+					</div>
+					<div className="flex items-center space-x-2">
+						<RadioGroupItem value="difficult" id="difficult" />
+						<Label
+							htmlFor="difficult"
+							className="hover:cursor-pointer"
+						>
+							Difficult
+						</Label>
+					</div>
+				</RadioGroup>
 			</div>
 
 			{/* SERVINGS INPUT  */}
 			<div>
-				<label className="block font-semibold" htmlFor="servings">
-					Serves
-				</label>
+				<label htmlFor="servings">Serves</label>
 				<input
 					id="servings"
 					type="number"
@@ -354,9 +399,26 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 				)}
 			</div>
 
-			{/* Ingredient Inputs */}
-			<div>
-				<label>Ingredients</label>
+			{/* Ingredients */}
+			<div className="bg-black/10">
+				<div className="flex justify-between">
+					<label className="text-2xl">Ingredients</label>
+
+					<button
+						className="flex gap-1"
+						onClick={() =>
+							appendIngredient({
+								name: "",
+								quantity: 1,
+								unit: "",
+							})
+						}
+					>
+						<div> add</div>
+						<MdAdd size={24} />
+					</button>
+				</div>
+
 				{ingredientFields.map((item, index) => {
 					const uniqueKey = item.id || `ingredient-${index}`; // Fallback to a unique string using index
 					return (
@@ -389,7 +451,8 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 								type="number"
 								placeholder="Quantity"
 								step="any" // Allows any decimal value (e.g., 0.5, 1.25)
-								min="0" // Optional: Ensures the quantity cannot be negative
+								min="1" // Optional: Ensures the quantity cannot be negative
+								className="flex w-10"
 							/>
 
 							{/* Input for unit */}
@@ -397,6 +460,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 								{...register(`ingredients.${index}.unit`)}
 								type="text"
 								placeholder="Unit"
+								className="w-10"
 							/>
 
 							{/* Remove ingredient button */}
@@ -405,22 +469,14 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 								onClick={() => removeIngredient(index)}
 								className="text-red-500"
 							>
-								Remove
+								<RiDeleteBin2Fill />
 							</button>
 						</div>
 					);
 				})}
-
-				{/* Add ingredient button */}
-				<button
-					type="button"
-					onClick={() =>
-						appendIngredient({ name: "", quantity: 0, unit: "" })
-					}
-				>
-					Add Ingredient
-				</button>
 			</div>
+
+			{/* Steps */}
 			<div>
 				<label>Steps</label>
 				{stepFields.map((item, index) => (

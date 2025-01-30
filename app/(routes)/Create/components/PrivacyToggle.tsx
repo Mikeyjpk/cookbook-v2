@@ -12,25 +12,26 @@ interface PrivacyToggleProps {
 const PrivacyToggle: React.FC<PrivacyToggleProps> = ({ watch, setValue }) => {
 	return (
 		<Card className="w-full bg-light rounded-lg border border-medium/50 shadow-md">
-			<CardContent className="p-4 flex flex-col gap-2">
-				<div className="flex items-center justify-between">
+			<CardContent className="p-4 flex items-center justify-between py-5">
+				<div className="flex flex-col gap-2">
 					<Label
 						htmlFor="isPrivate"
 						className="text-dark font-medium"
 					>
 						Secret Recipe
 					</Label>
-					<Switch
-						id="isPrivate"
-						checked={watch("isPrivate")}
-						onCheckedChange={(checked) =>
-							setValue("isPrivate", checked)
-						}
-					/>
+					<p className="text-xs text-font/50">
+						Make this recipe just for you!
+					</p>
 				</div>
-				<p className="text-xs text-medium/80">
-					Make this recipe just for you!
-				</p>
+				<Switch
+					id="isPrivate"
+					checked={watch("isPrivate")}
+					onCheckedChange={(checked) =>
+						setValue("isPrivate", checked)
+					}
+					className="mr-4"
+				/>
 			</CardContent>
 		</Card>
 	);

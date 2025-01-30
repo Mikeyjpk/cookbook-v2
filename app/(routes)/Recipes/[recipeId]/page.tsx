@@ -2,11 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import RecipePageClient from "./components/RecipePageClient";
 import { getRecipeById } from "@/app/api/services/recipeService";
 
-interface IParams {
-	recipeId: string;
-}
-
-const RecipePage = async ({ params }: { params: IParams }) => {
+const RecipePage = async ({ params }: { params: { recipeId: string } }) => {
 	const { recipeId } = params;
 	const recipe = await getRecipeById(recipeId);
 	if (!recipe) {

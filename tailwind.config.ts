@@ -20,7 +20,36 @@ export default {
 					DEFAULT: "hsl(var(--secondary))",
 					foreground: "hsl(var(--secondary-foreground))",
 				},
-				light: "#E2E8CE",
+				// purple
+				// light: "#FCE4EC",
+				// medium: "#F48FB1",
+				// dark: "#880E4F",
+				// danger: "#D81B60",
+				// font: "#000000",
+
+				// green again
+				// light: "#E8F5E9",
+				// medium: "#81C784",
+				// dark: "#1B5E20",
+				// danger: "#C62828",
+				// font: "#000000",
+
+				// orange
+				// light: "#FFF3E0",
+				// medium: "#FFB74D",
+				// dark: "#E65100",
+				// danger: "#C62828",
+				// font: "#000000",
+
+				// blue
+				// light: "#E3F2FD",
+				// medium: "#90CAF9",
+				// dark: "#1565C0",
+				// danger: "#D32F2F",
+				// font: "#000000",
+
+				// green
+				light: "#EDF2DE",
 				medium: "#ACBFA4",
 				dark: "#034C3C",
 				danger: "#D52941",

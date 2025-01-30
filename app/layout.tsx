@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -37,6 +38,7 @@ export default function RootLayout({
 					<AppContainer>
 						<Navbar />
 						<ContentContainer>{children}</ContentContainer>
+						<Toaster />
 					</AppContainer>
 				</body>
 			</html>

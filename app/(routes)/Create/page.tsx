@@ -1,5 +1,5 @@
 // CreatePage.tsx
-import RecipeForm from "@/app/components/RecipeForm";
+import RecipeForm from "@/app/(routes)/Create/components/RecipeForm";
 import axios from "axios";
 
 import CreatePageHeader from "./components/CreatePageHeader";

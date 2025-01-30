@@ -26,7 +26,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 	}, [currentUser, recipe.author_id]);
 
 	return (
-		<div className="flex flex-col items-center min-h-screen px-4 py-6">
+		<div className="flex flex-col items-center min-h-screen px-4 pb-6 pt-20">
 			<RecipeTitle title={recipe.title} />
 			<RecipeImage image={recipe.image} title={recipe.title} />
 			<RecipeInfo

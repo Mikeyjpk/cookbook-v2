@@ -1,6 +1,6 @@
 const RecipeSteps: React.FC<{ steps: any[] }> = ({ steps }) => {
 	return (
-		<div className="w-full max-w-2xl mt-6">
+		<div className="w-full max-w-2xl mt-6 select-none">
 			<h2 className="text-xl font-semibold text-dark mb-2">Steps</h2>
 			<div className="space-y-2">
 				{steps.length > 0 ? (

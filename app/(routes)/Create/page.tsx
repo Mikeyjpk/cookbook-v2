@@ -2,8 +2,6 @@
 import RecipeForm from "@/app/(routes)/Create/components/RecipeForm";
 import axios from "axios";
 
-import CreatePageHeader from "./components/CreatePageHeader";
-
 // Define the type for a single ingredient
 interface Ingredient {
 	id: string;
@@ -30,8 +28,7 @@ const CreatePage = async () => {
 	}
 
 	return (
-		<div className="flex flex-col">
-			<CreatePageHeader />
+		<div className="pt-14">
 			<RecipeForm existingIngredients={existingIngredients} />
 		</div>
 	);

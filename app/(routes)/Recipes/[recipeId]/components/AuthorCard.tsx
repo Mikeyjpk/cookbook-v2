@@ -9,14 +9,15 @@ interface AuthorCardProps {
 
 const AuthorCard: React.FC<AuthorCardProps> = ({ author }) => {
 	return (
-		<div className="flex items-center gap-2 bg-medium/20 p-3 rounded-lg border border-medium/40 shadow-md mt-6">
+		<div className="flex items-center gap-2 bg-medium/20 p-3 rounded-lg border border-medium/40 text-dark shadow-md mt-6 hover:text-dark/70 hover:bg-medium/10">
 			{/* Icon */}
-			<TbChefHat size={28} className="text-medium" />
-
+			<TbChefHat size={28} className="" />
 			{/* Author Name */}
-			<div className="text-medium font-semibold">
-				Recipe by <span className="">{author}</span>
-			</div>
+			{/* todo: make this a button that navs to a page of all this users
+			recipes that are public. */}
+			<button className="font-semibold">
+				Recipes by <span className="">{author}</span>
+			</button>
 		</div>
 	);
 };

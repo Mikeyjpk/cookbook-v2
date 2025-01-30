@@ -24,14 +24,14 @@ const Navbar = () => {
 	};
 
 	// Get the title based on the path or default to "Page"
-	const currentTitle = pageTitles[pathname] || "Recipe viewer";
+	const currentTitle = pageTitles[pathname] || "Recipe Viewer";
 
 	return (
-		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg fixed z-50">
+		<div className="flex justify-between items-center w-full h-14 bg-dark pl-2 pr-6 shadow-lg fixed z-50">
 			<SignedIn>
 				<NavMenu isOpen={showNavMenu} toggleOpen={handleToggleOpen} />
 				{/* Dynamic Page Title */}
-				<span className="text-light font-semibold text-lg select-none">
+				<span className="text-light font-semibold text-lg select-none pr-3">
 					{currentTitle}
 				</span>
 

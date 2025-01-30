@@ -44,7 +44,7 @@ export async function DELETE(
 	}
 
 	try {
-		const { id } = await params;
+		const { id } = params;
 
 		if (!id.match(/^[a-fA-F0-9]{24}$/)) {
 			return NextResponse.json(

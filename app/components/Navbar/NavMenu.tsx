@@ -13,11 +13,11 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 				onClick={toggleOpen}
 				className="text-light p-2 rounded-lg hover:bg-medium transition-all"
 			>
-				{isOpen ? <TbMenu3 size={22} /> : <TbMenu4 size={22} />}
+				{isOpen ? <TbMenu3 size={28} /> : <TbMenu4 size={28} />}
 			</button>
 
 			{isOpen && (
-				<div className="absolute bg-light rounded-lg shadow-lg -right-10 top-10 p-3 transition-opacity duration-300">
+				<div className="absolute bg-light rounded-lg shadow-lg -left-4 top-14 p-3 transition-opacity duration-300">
 					<div className="flex flex-col w-40 space-y-2">
 						<NavMenuButton
 							name="Home"

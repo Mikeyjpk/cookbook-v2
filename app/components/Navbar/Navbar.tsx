@@ -27,19 +27,14 @@ const Navbar = () => {
 
 	return (
 		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg">
-			{/* Dynamic Page Title */}
-			<span className="text-light font-semibold text-lg">
-				{currentTitle}
-			</span>
-
 			<SignedIn>
-				<div className="flex items-center gap-4">
-					<NavMenu
-						isOpen={showNavMenu}
-						toggleOpen={handleToggleOpen}
-					/>
-					<UserButton />
-				</div>
+				<NavMenu isOpen={showNavMenu} toggleOpen={handleToggleOpen} />
+				{/* Dynamic Page Title */}
+				<span className="text-light font-semibold text-lg select-none">
+					{currentTitle}
+				</span>
+
+				<UserButton />
 			</SignedIn>
 
 			<SignedOut>

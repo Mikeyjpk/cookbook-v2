@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import RecipeCard from "../components/RecipeCard";
 import { Input } from "@/components/ui/input";
 
+// todo: add a filter for categories & difficulty
+
 const HomePageClient: React.FC = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [recipes, setRecipes] = useState<any[]>([]);

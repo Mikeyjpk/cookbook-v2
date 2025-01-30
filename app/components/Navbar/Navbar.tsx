@@ -27,7 +27,7 @@ const Navbar = () => {
 	const currentTitle = pageTitles[pathname] || "Recipe viewer";
 
 	return (
-		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg">
+		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg fixed z-50">
 			<SignedIn>
 				<NavMenu isOpen={showNavMenu} toggleOpen={handleToggleOpen} />
 				{/* Dynamic Page Title */}

@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+// todo: add user toggle light>dark mode
+
 export default {
 	darkMode: ["class"],
 	content: [
@@ -20,40 +22,20 @@ export default {
 					DEFAULT: "hsl(var(--secondary))",
 					foreground: "hsl(var(--secondary-foreground))",
 				},
-				// purple
-				// light: "#FCE4EC",
-				// medium: "#F48FB1",
-				// dark: "#880E4F",
-				// danger: "#D81B60",
-				// font: "#000000",
-
-				// green again
-				// light: "#E8F5E9",
-				// medium: "#81C784",
-				// dark: "#1B5E20",
-				// danger: "#C62828",
-				// font: "#000000",
-
-				// orange
-				// light: "#FFF3E0",
-				// medium: "#FFB74D",
-				// dark: "#E65100",
-				// danger: "#C62828",
-				// font: "#000000",
-
-				// blue
-				// light: "#E3F2FD",
-				// medium: "#90CAF9",
-				// dark: "#1565C0",
-				// danger: "#D32F2F",
-				// font: "#000000",
-
-				// green
+				// dev colors light
 				light: "#EDF2DE",
 				medium: "#ACBFA4",
 				dark: "#034C3C",
 				danger: "#D52941",
 				font: "#000000",
+
+				// // Dev colours dark
+				// light: "#034C3C",
+				// medium: "#ACBFA4",
+				// dark: "#EDF2DE",
+				// danger: "#D52941",
+				// font: "#000000",
+
 				card: {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",

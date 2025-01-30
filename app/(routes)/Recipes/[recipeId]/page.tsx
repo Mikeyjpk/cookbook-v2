@@ -1,5 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
-import RecipePageClient from "./RecipePageClient";
+import RecipePageClient from "./components/RecipePageClient";
 import { getRecipeById } from "@/app/api/services/recipeService";
 
 interface IParams {

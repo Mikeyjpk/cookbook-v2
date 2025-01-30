@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import RecipeTitle from "./components/RecipeTitle";
-import RecipeImage from "./components/RecipeImage";
-import RecipeInfo from "./components/RecipeInfo";
-import RecipeIngredients from "./components/RecipeIngredients";
-import RecipeSteps from "./components/RecipeSteps";
-import DeleteRecipeButton from "./components/DeleteRecipeButton";
+import RecipeTitle from "./RecipeTitle";
+import RecipeImage from "./RecipeImage";
+import RecipeInfo from "./RecipeInfo";
+import RecipeIngredients from "./RecipeIngredients";
+import RecipeSteps from "./RecipeSteps";
+import DeleteRecipeButton from "./DeleteRecipeButton";
+import AuthorCard from "./AuthorCard";
 
 interface RecipePageClientProps {
 	recipe: any;
@@ -37,7 +38,11 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 			/>
 			<RecipeIngredients ingredients={recipe.recipeIngredients} />
 			<RecipeSteps steps={recipe.steps} />
-			{isAuthor && <DeleteRecipeButton recipeId={recipe.recipe_id} />}
+			{isAuthor ? (
+				<DeleteRecipeButton recipeId={recipe.recipe_id} />
+			) : (
+				<AuthorCard author={recipe.author_name} />
+			)}
 		</div>
 	);
 };

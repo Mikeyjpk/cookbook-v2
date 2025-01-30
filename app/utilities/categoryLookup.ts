@@ -16,4 +16,5 @@ export const categoryLookup = {
 	sidedish: "Side Dish",
 	quickandeasy: "Quick & Easy",
 	mealprep: "Meal Prep",
+	mexican: "Mexican",
 };

@@ -1,11 +1,17 @@
 "use client";
 
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Recipe } from "@/types/recipeResponse";
+import RecipeTitle from "./components/RecipeTitle";
+import RecipeImage from "./components/RecipeImage";
+import RecipeInfo from "./components/RecipeInfo";
+import RecipeIngredients from "./components/RecipeIngredients";
+import RecipeSteps from "./components/RecipeSteps";
+import DeleteRecipeButton from "./components/DeleteRecipeButton";
 
 interface RecipePageClientProps {
-	recipe: any;
+	recipe: Recipe;
 	currentUser: any;
 }
 
@@ -16,84 +22,30 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 	const router = useRouter();
 	const [isAuthor, setIsAuthor] = useState<boolean>(false);
 
-	const checkIfAuthor = (currentUser: any, authorId: any) => {
-		if (currentUser == authorId) {
-			setIsAuthor(true);
-		}
-	};
-
+	// Check if the current user is the author
 	useEffect(() => {
-		checkIfAuthor(currentUser, recipe.author_id);
+		setIsAuthor(currentUser === recipe.author_id);
 	}, [currentUser, recipe.author_id]);
 
-	const handleDeleteRecipe = async () => {
-		try {
-			await axios.delete(`/api/recipes/${recipe.recipe_id}`);
-			alert("Recipe deleted successfully");
-			router.push("/Recipes");
-		} catch (error) {
-			console.error("Error deleting recipe:", error);
-			alert("Failed to delete recipe");
-		}
-	};
-
 	return (
-		<div className="flex flex-col gap-2">
-			{/* Delete Button */}
-			{isAuthor && (
-				<div>
-					<button
-						onClick={handleDeleteRecipe}
-						className="text-red-500"
-					>
-						Delete Recipe
-					</button>
-				</div>
-			)}
+		<div className="flex flex-col items-center min-h-screen px-4 py-6">
+			<RecipeTitle title={recipe.title} />
 
-			{/* Recipe Title */}
-			<div className="text-2xl font-semi-bold">{recipe.title}</div>
+			<RecipeImage image={recipe.image} title={recipe.title} />
 
-			{/* Image */}
-			<div className="flex items-center justify-center">
-				<div className="max-h-[500px] overflow-hidden rounded-md md:rounded-xl">
-					<img
-						src={recipe.image}
-						className="object-contain max-w-full max-h-full object-center"
-					/>
-				</div>
-			</div>
+			<RecipeInfo
+				description={recipe.description}
+				prep_time={recipe.prep_time}
+				cook_time={recipe.cook_time}
+				difficulty={recipe.difficulty}
+				servings={recipe.servings}
+			/>
 
-			{/* Description */}
-			<div className="text-sm font-thin">{recipe.description}</div>
+			<RecipeIngredients ingredients={recipe.recipeIngredients} />
 
-			{/* Times */}
-			<div>Prep time: {recipe.prep_time}</div>
-			<div>Cook Time: {recipe.cook_time}</div>
+			<RecipeSteps steps={recipe.steps} />
 
-			{/* Ingredients */}
-			<div className="text-lg">Ingredients</div>
-			<div className="grid grid-cols-2 gap-3 text-sm">
-				{recipe.recipeIngredients.map((recipeIngredient: any) => (
-					<div
-						key={recipeIngredient.id}
-						className="bg-red-700/50 p-2 rounded-md"
-					>
-						<div>
-							Ingredient: {recipeIngredient.ingredient.name}
-						</div>
-						<div>Quantity: {recipeIngredient.quantity}</div>
-					</div>
-				))}
-			</div>
-
-			{/* Steps */}
-			{recipe.steps.map((step: any) => (
-				<div key={step.order} className="flex gap-3">
-					<div>{step.order}</div>
-					<div>{step.description}</div>
-				</div>
-			))}
+			{isAuthor && <DeleteRecipeButton recipeId={recipe.recipe_id} />}
 		</div>
 	);
 };

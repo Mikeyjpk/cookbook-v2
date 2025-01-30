@@ -14,6 +14,8 @@ export async function POST(request: Request) {
 		return NextResponse.error();
 	}
 
+	console.log(user);
+
 	let body;
 	try {
 		body = await request.json();
@@ -81,7 +83,7 @@ export async function POST(request: Request) {
 				cook_time: cook_time_parsed,
 				categories: categoryStrings,
 				author_id: user.id,
-				author_name: user.firstName || "anon",
+				author_name: user.username || user.firstName || "anon",
 				image: image || null,
 				createdAt: new Date(),
 				updatedAt: new Date(),

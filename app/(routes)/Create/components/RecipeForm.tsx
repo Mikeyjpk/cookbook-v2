@@ -167,6 +167,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 				appendIngredient={appendIngredient}
 				removeIngredient={removeIngredient}
 				register={register}
+				setValue={setValue} // Add this line to pass setValue
 				existingIngredients={existingIngredients}
 			/>
 

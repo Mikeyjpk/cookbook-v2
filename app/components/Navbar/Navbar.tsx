@@ -20,10 +20,11 @@ const Navbar = () => {
 		"/": "All Recipes",
 		"/Create": "Create Recipe",
 		"/Recipes": "My Cookbook",
+		"/Recipes/*": "Recipe",
 	};
 
 	// Get the title based on the path or default to "Page"
-	const currentTitle = pageTitles[pathname] || "Page";
+	const currentTitle = pageTitles[pathname] || "Recipe viewer";
 
 	return (
 		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg">

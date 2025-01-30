@@ -1,9 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { PiBowlFoodBold } from "react-icons/pi";
 
 interface RecipeCardProps {
-	recipe: any;
+	recipe: {
+		recipe_id: string;
+		image: string;
+		title: string;
+	};
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
@@ -12,15 +17,26 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 	return (
 		<button
 			onClick={() => router.push(`/Recipes/${recipe.recipe_id}`)}
-			className="bg-white px-4 py-2 rounded-md flex flex-col"
+			className="bg-dark/10 shadow-md rounded-lg flex flex-col p-3 hover:shadow-xl transition-all w-44"
 		>
-			<div className="flex items-center justify-center bg-black/10 rounded-md p-1">
-				<img
-					src={recipe.image}
-					className="object-contain w-40 object-center rounded-md"
-				/>
+			{/* Image Wrapper (Fixed Square) */}
+			<div className="relative w-full aspect-square rounded-lg overflow-hidden border border-medium">
+				{recipe.image ? (
+					<img
+						src={recipe.image}
+						alt={recipe.title}
+						className="absolute top-0 left-0 w-full h-full object-cover"
+					/>
+				) : (
+					// todo: replace with image depending on the category
+					<div className="flex w-full h-full items-center justify-center">
+						<PiBowlFoodBold size={52} className="text-dark" />
+					</div>
+				)}
 			</div>
-			<div className="flex items-center justify-center p-1 font-semibold">
+
+			{/* Title */}
+			<div className="mt-2 text-center text-dark font-semibold text-sm truncate">
 				{recipe.title}
 			</div>
 		</button>

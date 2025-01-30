@@ -17,7 +17,7 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 			</button>
 
 			{isOpen && (
-				<div className="absolute bg-light rounded-lg shadow-lg -left-4 top-14 p-3 transition-opacity duration-300">
+				<div className="absolute bg-light rounded-lg shadow-lg -left-4 top-14 p-3 transition-opacity duration-300 z-50">
 					<div className="flex flex-col w-40 space-y-2">
 						<NavMenuButton
 							name="Home"
@@ -25,13 +25,13 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 							toggleOpen={toggleOpen}
 						/>
 						<NavMenuButton
-							name="Create"
-							route="/Create"
+							name="Recipes"
+							route="/Recipes"
 							toggleOpen={toggleOpen}
 						/>
 						<NavMenuButton
-							name="Recipes"
-							route="/Recipes"
+							name="Create"
+							route="/Create"
 							toggleOpen={toggleOpen}
 						/>
 					</div>

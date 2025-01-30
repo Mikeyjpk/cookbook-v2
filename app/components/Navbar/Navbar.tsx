@@ -2,27 +2,36 @@
 
 import { useCallback, useState } from "react";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-
+import { usePathname } from "next/navigation";
 import NavMenu from "./NavMenu";
-import { useRouter } from "next/navigation";
 
 const Navbar = () => {
-	const router = useRouter();
+	const pathname = usePathname(); // Get current route
 	const [showNavMenu, setShowNavMenu] = useState(false);
 
 	const handleToggleOpen = useCallback(() => {
-		setShowNavMenu((showNavMenu) => !showNavMenu);
+		setShowNavMenu((prev) => !prev);
 	}, []);
 
+	// Map paths to labels
+	const pageTitles: Record<string, string> = {
+		"/": "All Recipes",
+		"/Create": "Create Recipe",
+		"/Recipes": "My Cookbook",
+	};
+
+	// Get the title based on the path or default to "Page"
+	const currentTitle = pageTitles[pathname] || "Page";
+
 	return (
-		<div
-			className={`" flex justify-between items-center w-full h-12 bg-primary`}
-		>
-			<button className="rounded-sm p-1" onClick={() => router.push("/")}>
-				Home Button
-			</button>
+		<div className="flex justify-between items-center w-full h-14 bg-dark px-6 shadow-lg">
+			{/* Dynamic Page Title */}
+			<span className="text-light font-semibold text-lg">
+				{currentTitle}
+			</span>
+
 			<SignedIn>
-				<div className="flex items-center rounded-lg p-1 m-2 border-[1px] border-secondary">
+				<div className="flex items-center gap-4">
 					<NavMenu
 						isOpen={showNavMenu}
 						toggleOpen={handleToggleOpen}
@@ -30,9 +39,13 @@ const Navbar = () => {
 					<UserButton />
 				</div>
 			</SignedIn>
+
 			<SignedOut>
-				{/* doesnt need to have children passed in, reminder how the component works */}
-				<SignInButton children={"Sign In"} />
+				<SignInButton>
+					<button className="bg-danger text-light px-4 py-2 rounded-lg font-semibold hover:bg-[#b71c31] transition-all">
+						Sign In
+					</button>
+				</SignInButton>
 			</SignedOut>
 		</div>
 	);

@@ -12,12 +12,14 @@ const NavMenuButton: React.FC<NavMenuButtonProps> = ({
 	toggleOpen,
 }) => {
 	const router = useRouter();
+
 	return (
 		<button
 			onClick={() => {
 				router.push(route);
 				toggleOpen();
 			}}
+			className="px-4 py-2 text-dark font-semibold hover:bg-medium hover:text-light rounded-lg transition-all"
 		>
 			{name}
 		</button>

@@ -5,6 +5,8 @@ import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import NavMenu from "./NavMenu";
 
+// todo: get the user's username from the db and display Mikey's Cookbook etc
+
 const Navbar = () => {
 	const pathname = usePathname(); // Get current route
 	const [showNavMenu, setShowNavMenu] = useState(false);

@@ -16,7 +16,30 @@ interface IngredientsFieldProps {
 	register: any;
 	errors: any;
 	existingIngredients: any[];
+	setValue: any;
 }
+
+const parseFractionToDecimal = (value: string): number => {
+	const fractionRegex = /^(\d+)\/(\d+)$/; // Matches "1/2"
+
+	// Match a simple fraction (e.g., "1/2" → 0.5)
+	const fractionMatch = value.match(fractionRegex);
+	if (fractionMatch) {
+		const numerator = parseFloat(fractionMatch[1]); // Numerator
+		const denominator = parseFloat(fractionMatch[2]); // Denominator
+		const decimalValue = numerator / denominator;
+		return parseFloat(decimalValue.toFixed(3)); // Allow any whole number
+	}
+
+	// Parse as a normal decimal or whole number
+	const numericValue = parseFloat(value);
+	if (!isNaN(numericValue)) {
+		return parseFloat(numericValue.toFixed(3)); // Allow any whole number
+	}
+
+	// Default return (invalid input)
+	return 0;
+};
 
 const IngredientsField: React.FC<IngredientsFieldProps> = ({
 	ingredientFields,
@@ -25,6 +48,7 @@ const IngredientsField: React.FC<IngredientsFieldProps> = ({
 	register,
 	errors,
 	existingIngredients,
+	setValue,
 }) => {
 	return (
 		<Card className="w-full bg-light rounded-lg border border-medium/50 shadow-md">
@@ -40,7 +64,7 @@ const IngredientsField: React.FC<IngredientsFieldProps> = ({
 						onClick={() =>
 							appendIngredient({
 								name: "",
-								quantity: 1,
+								quantity: 0, // FIX: Ensure quantity is always a number
 								unit: "",
 							})
 						}
@@ -85,14 +109,20 @@ const IngredientsField: React.FC<IngredientsFieldProps> = ({
 										`ingredients.${index}.quantity`,
 										{
 											required: "Quantity is required",
-											valueAsNumber: true,
 										}
 									)}
-									type="number"
+									type="text"
 									placeholder="Qty"
-									step="any"
-									min="1"
-									className="w-16 text-center bg-light border-medium/60 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+									className="w-16 text-center bg-light border-medium/60"
+									onBlur={(e) => {
+										const newValue = parseFractionToDecimal(
+											e.target.value
+										);
+										setValue(
+											`ingredients.${index}.quantity`,
+											newValue
+										);
+									}}
 								/>
 
 								{/* Unit */}
@@ -117,7 +147,7 @@ const IngredientsField: React.FC<IngredientsFieldProps> = ({
 								</Button>
 							</div>
 
-							{/* Error Messages (Placed Below the Row) */}
+							{/* Error Messages */}
 							<div className="flex flex-col text-danger text-xs">
 								{errors.ingredients?.[index]?.name && (
 									<span>

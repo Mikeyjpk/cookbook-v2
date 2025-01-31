@@ -1,5 +1,7 @@
 import prisma from "@/lib/prismadb";
 
+// run test
+
 /**
  * Fetch all recipes in the database.
  * @returns A list of all recipes.

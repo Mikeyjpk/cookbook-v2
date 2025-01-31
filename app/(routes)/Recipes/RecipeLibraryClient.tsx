@@ -37,7 +37,7 @@ const RecipeLibraryClient: React.FC = () => {
 	);
 
 	return (
-		<div className="min-h-screen flex flex-col items-center pt-20">
+		<div className="min-h-screen flex flex-col items-center pt-6">
 			{/* Search Input */}
 			<div className="w-full max-w-md">
 				<Input

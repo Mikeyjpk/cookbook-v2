@@ -129,10 +129,7 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 	};
 
 	return (
-		<form
-			onSubmit={handleSubmit(onSubmit)}
-			className="flex flex-col gap-4 py-6"
-		>
+		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 			<TitleInput register={register} errors={errors} />
 
 			{/* todo: add delete fx to remove images from cloundinary */}

@@ -15,6 +15,13 @@ interface Ingredient {
 // This is a Server Component that fetches ingredients from the server
 const CreatePage = async () => {
 	// todo: this may be spamming requests, try moving this into a client file
+
+	// todo: check for the user name
+	// get the username from the currentUser
+	// if not username > show state to explain to make a username
+	// if username > show recipe form
+	// add to recipe form option to show or hide author tag
+
 	let existingIngredients: Ingredient[] = [];
 
 	try {
@@ -28,7 +35,7 @@ const CreatePage = async () => {
 	}
 
 	return (
-		<div className="pt-14">
+		<div className="pt-6">
 			<RecipeForm existingIngredients={existingIngredients} />
 		</div>
 	);

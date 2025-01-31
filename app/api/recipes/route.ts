@@ -14,8 +14,6 @@ export async function POST(request: Request) {
 		return NextResponse.error();
 	}
 
-	console.log(user);
-
 	let body;
 	try {
 		body = await request.json();
@@ -25,6 +23,7 @@ export async function POST(request: Request) {
 			{ status: 400 }
 		);
 	}
+	console.log(body);
 
 	const {
 		title,

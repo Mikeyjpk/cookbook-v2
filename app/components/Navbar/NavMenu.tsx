@@ -7,6 +7,12 @@ interface NavMenuProps {
 	toggleOpen: () => void;
 }
 
+const toggleOff = (state: boolean, toggleOpen: () => void) => {
+	if (state === true) {
+		toggleOpen();
+	}
+};
+
 const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 	const router = useRouter();
 	return (
@@ -14,7 +20,9 @@ const NavMenu: React.FC<NavMenuProps> = ({ isOpen, toggleOpen }) => {
 			<div className="flex items-center gap-1">
 				{/* Home Button */}
 				<button
-					onClick={() => router.push("/")}
+					onClick={() => {
+						router.push("/"), toggleOff(isOpen, toggleOpen);
+					}}
 					className="text-light p-2 rounded-lg hover:bg-medium transition-all"
 				>
 					<TbHome size={28} />

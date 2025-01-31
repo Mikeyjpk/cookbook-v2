@@ -52,3 +52,31 @@ export async function deleteRecipeById(recipeId: string) {
 		throw new Error("Failed to delete recipe");
 	}
 }
+
+interface IParams {
+	recipeId?: string;
+}
+
+export const getRecipeByParams = async (params: IParams | Promise<IParams>) => {
+	try {
+		const resolvedParams = await params;
+		const { recipeId } = resolvedParams;
+
+		const recipe = await prisma.recipe.findUnique({
+			where: { recipe_id: recipeId },
+			include: {
+				recipeIngredients: {
+					include: { ingredient: true },
+				},
+			},
+		});
+
+		if (!recipe) {
+			return null;
+		}
+
+		return recipe;
+	} catch (error: any) {
+		throw new Error(error);
+	}
+};

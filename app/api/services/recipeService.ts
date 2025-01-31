@@ -55,33 +55,28 @@ export async function deleteRecipeById(recipeId: string) {
 	}
 }
 
-interface IParams {
-	recipeId?: string;
-}
+// interface IParams {
+// 	recipeId?: string;
+// }
 
-export const getRecipeByParams = async (params: IParams) => {
-	try {
-		if (!params) throw new Error("Params are required");
+// export const getRecipeByParams = async (params: IParams) => {
+// 	try {
+// 		if (!params || !params.recipeId) {
+// 			throw new Error("Invalid parameters: recipeId is required.");
+// 		}
 
-		const { recipeId } = params;
-		if (!recipeId) return null;
+// 		const recipe = await prisma.recipe.findUnique({
+// 			where: { recipe_id: params.recipeId },
+// 			include: {
+// 				recipeIngredients: {
+// 					include: { ingredient: true },
+// 				},
+// 			},
+// 		});
 
-		const recipe = await prisma.recipe.findUnique({
-			where: { recipe_id: recipeId },
-			include: {
-				recipeIngredients: {
-					include: { ingredient: true },
-				},
-			},
-		});
-
-		if (!recipe) {
-			return null;
-		}
-
-		return recipe;
-	} catch (error) {
-		console.error("Error fetching recipe:", error);
-		throw new Error("Failed to fetch recipe");
-	}
-};
+// 		return recipe || null;
+// 	} catch (error) {
+// 		console.error("Error fetching recipe:", error);
+// 		throw new Error("Failed to fetch recipe");
+// 	}
+// };

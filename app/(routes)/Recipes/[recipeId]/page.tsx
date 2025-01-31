@@ -7,7 +7,8 @@ interface IParams {
 }
 
 const RecipePage = async ({ params }: { params: IParams }) => {
-	const recipe = await getRecipeByParams(params);
+	const resolvedParams = await Promise.resolve(params);
+	const recipe = await getRecipeByParams(resolvedParams);
 
 	if (!recipe) {
 		console.error("Failed to get recipe");

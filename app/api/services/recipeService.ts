@@ -59,10 +59,12 @@ interface IParams {
 	recipeId?: string;
 }
 
-export const getRecipeByParams = async (params: IParams | Promise<IParams>) => {
+export const getRecipeByParams = async (params: IParams) => {
 	try {
-		const resolvedParams = await params;
-		const { recipeId } = resolvedParams;
+		if (!params) throw new Error("Params are required");
+
+		const { recipeId } = params;
+		if (!recipeId) return null;
 
 		const recipe = await prisma.recipe.findUnique({
 			where: { recipe_id: recipeId },
@@ -78,7 +80,8 @@ export const getRecipeByParams = async (params: IParams | Promise<IParams>) => {
 		}
 
 		return recipe;
-	} catch (error: any) {
-		throw new Error(error);
+	} catch (error) {
+		console.error("Error fetching recipe:", error);
+		throw new Error("Failed to fetch recipe");
 	}
 };

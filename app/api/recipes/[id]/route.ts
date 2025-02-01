@@ -6,9 +6,11 @@ import {
 
 export async function GET(
 	req: Request,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
-	const { id } = params;
+	// Await the params to resolve (even if it's already a plain object, await works fine)
+	const resolvedParams = await params;
+	const { id } = resolvedParams;
 
 	try {
 		const recipe = await getRecipeById(id);
@@ -32,11 +34,12 @@ export async function GET(
 
 export async function DELETE(
 	req: Request,
-	context: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> }
 ) {
-	const { params } = context;
+	// Await the params
+	const resolvedParams = await params;
 
-	if (!params?.id) {
+	if (!resolvedParams?.id) {
 		return NextResponse.json(
 			{ error: "Recipe ID is required" },
 			{ status: 400 }
@@ -44,7 +47,7 @@ export async function DELETE(
 	}
 
 	try {
-		const { id } = params;
+		const { id } = resolvedParams;
 
 		if (!id.match(/^[a-fA-F0-9]{24}$/)) {
 			return NextResponse.json(
@@ -69,7 +72,6 @@ export async function DELETE(
 		return NextResponse.json({ message: "Recipe deleted successfully" });
 	} catch (error: any) {
 		console.error("Error deleting recipe:", error);
-
 		return NextResponse.json(
 			{ error: error.message || "Failed to delete recipe" },
 			{ status: 500 }

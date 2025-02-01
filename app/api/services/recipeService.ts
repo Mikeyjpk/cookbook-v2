@@ -1,7 +1,5 @@
 import prisma from "@/lib/prismadb";
 
-// run test
-
 /**
  * Fetch all recipes in the database.
  * @returns A list of all recipes.
@@ -54,29 +52,3 @@ export async function deleteRecipeById(recipeId: string) {
 		throw new Error("Failed to delete recipe");
 	}
 }
-
-// interface IParams {
-// 	recipeId?: string;
-// }
-
-// export const getRecipeByParams = async (params: IParams) => {
-// 	try {
-// 		if (!params || !params.recipeId) {
-// 			throw new Error("Invalid parameters: recipeId is required.");
-// 		}
-
-// 		const recipe = await prisma.recipe.findUnique({
-// 			where: { recipe_id: params.recipeId },
-// 			include: {
-// 				recipeIngredients: {
-// 					include: { ingredient: true },
-// 				},
-// 			},
-// 		});
-
-// 		return recipe || null;
-// 	} catch (error) {
-// 		console.error("Error fetching recipe:", error);
-// 		throw new Error("Failed to fetch recipe");
-// 	}
-// };

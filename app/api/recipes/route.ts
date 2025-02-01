@@ -23,7 +23,6 @@ export async function POST(request: Request) {
 			{ status: 400 }
 		);
 	}
-	console.log(body);
 
 	const {
 		title,

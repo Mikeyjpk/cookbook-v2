@@ -4,7 +4,8 @@ import { useState } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Trash2 } from "lucide-react"; // Icons for loading & delete
+import { Loader2, Trash2 } from "lucide-react";
+import { extractCloudinaryPublicId } from "@/app/utilities/cloudinaryUtils";
 
 interface ImageUploadProps {
 	imageUrl: string | null;
@@ -13,6 +14,27 @@ interface ImageUploadProps {
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const [previousImageUrl, setPreviousImageUrl] = useState<string | null>(
+		null
+	);
+
+	const deleteImageFromCloudinary = async (
+		imageUrlToDelete: string | null
+	) => {
+		const publicId = extractCloudinaryPublicId(imageUrlToDelete);
+		if (publicId) {
+			try {
+				const deleteResponse = await axios.post(
+					"/api/recipes/deleteImage",
+					{
+						publicId,
+					}
+				);
+			} catch (error) {
+				console.error("Failed to delete previous image:", error);
+			}
+		}
+	};
 
 	const onImageUpload = async (
 		event: React.ChangeEvent<HTMLInputElement>
@@ -24,10 +46,17 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 		const reader = new FileReader();
 		reader.onload = async () => {
 			try {
+				// Delete the previous image before uploading a new one
+				if (previousImageUrl) {
+					await deleteImageFromCloudinary(previousImageUrl);
+				}
+
+				// Upload the new image
 				const response = await axios.post("/api/recipes/uploadImage", {
 					image: reader.result,
 				});
 				setImageUrl(response.data.imageUrl);
+				setPreviousImageUrl(response.data.imageUrl); // Store new image for future deletions
 			} catch (error) {
 				console.error("Error uploading image:", error);
 			} finally {
@@ -37,13 +66,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ imageUrl, setImageUrl }) => {
 		reader.readAsDataURL(file);
 	};
 
-	const removeImage = () => {
+	const removeImage = async () => {
+		if (imageUrl) {
+			await deleteImageFromCloudinary(imageUrl);
+		}
+
 		setImageUrl(null);
+		setPreviousImageUrl(null);
 	};
 
 	return (
 		<div className="flex justify-center">
-			<Card className="w-[300px]  lg:w-[280px] rounded-lg border border-medium/50 bg-light shadow-md">
+			<Card className="w-[300px] lg:w-[280px] rounded-lg border border-medium/50 bg-light shadow-md">
 				<CardContent className="p-4 flex flex-col items-center justify-center">
 					{imageUrl ? (
 						<div className="relative flex justify-center">

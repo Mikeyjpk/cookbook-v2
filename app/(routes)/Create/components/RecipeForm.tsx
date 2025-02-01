@@ -38,14 +38,23 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		watch,
 		setValue,
 		reset,
+		clearErrors,
 	} = useForm<RecipeFormData>({
 		defaultValues: {
+			title: "",
+			prep_time: 0,
+			cook_time: 0,
+			description: "",
 			steps: [{ order: 1, description: "" }],
 			ingredients: [{ name: "", quantity: 1, unit: "" }],
 			categories: [],
 			isPrivate: false,
+			difficulty: "beginner",
 			servings: 1,
+			image: undefined,
 		},
+		mode: "onSubmit", // ✅ Only validate on form submit
+		reValidateMode: "onSubmit",
 	});
 
 	// Field array for steps
@@ -132,8 +141,16 @@ const RecipeForm: React.FC<RecipeFormProps> = ({ existingIngredients }) => {
 		<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 			<TitleInput register={register} errors={errors} />
 
-			{/* todo: add delete fx to remove images from cloundinary */}
-			<ImageUpload imageUrl={imageUrl} setImageUrl={setImageUrl} />
+			<ImageUpload
+				imageUrl={imageUrl}
+				setImageUrl={(url) => {
+					setImageUrl(url);
+					setValue("image", url || undefined, {
+						shouldValidate: false,
+					});
+					clearErrors("image");
+				}}
+			/>
 
 			<TimeInputs register={register} errors={errors} />
 

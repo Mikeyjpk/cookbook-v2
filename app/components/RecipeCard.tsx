@@ -17,9 +17,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 	return (
 		<button
 			onClick={() => router.push(`/Recipes/${recipe.recipe_id}`)}
-			className=" bg-dark/10 shadow-md rounded-lg flex flex-col p-3 hover:shadow-xl transition-all w-44 h-fit"
+			className=" bg-dark/10 shadow-md rounded-lg flex flex-col p-3 hover:shadow-xl transition-all w-44 h-52"
 		>
-			{/* Image Wrapper (Fixed Square) */}
+			{/* Image Wrapper*/}
 			<div className="relative w-full aspect-square rounded-lg overflow-hidden border border-medium">
 				{recipe.image ? (
 					<img

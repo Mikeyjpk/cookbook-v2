@@ -52,7 +52,7 @@ const HomePageClient: React.FC = () => {
 					Loading Recipes...
 				</div>
 			) : (
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-6 py-6 justify-items-center items-center">
+				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-4 py-6 justify-items-center items-center">
 					{filteredRecipes.length > 0 ? (
 						filteredRecipes.map((recipe) => (
 							<RecipeCard

@@ -8,9 +8,9 @@ const RecipeIngredients: React.FC<{ ingredients: any[] }> = ({
 			</h2>
 			<div className="grid grid-cols-2 gap-3">
 				{ingredients.length > 0 ? (
-					ingredients.map((ingredient: any) => (
+					ingredients.map((ingredient: any, index) => (
 						<div
-							key={ingredient.id}
+							key={ingredient.id ?? `ingredient-${index}`}
 							className="bg-medium/10 p-3 rounded-md shadow-sm"
 						>
 							<p className="text-dark font-medium">

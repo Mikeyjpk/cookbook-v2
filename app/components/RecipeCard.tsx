@@ -17,7 +17,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 	return (
 		<button
 			onClick={() => router.push(`/Recipes/${recipe.recipe_id}`)}
-			className="bg-dark/10 shadow-md rounded-lg flex flex-col p-3 hover:shadow-xl transition-all w-44"
+			className=" bg-dark/10 shadow-md rounded-lg flex flex-col p-3 hover:shadow-xl transition-all w-44 h-fit"
 		>
 			{/* Image Wrapper (Fixed Square) */}
 			<div className="relative w-full aspect-square rounded-lg overflow-hidden border border-medium">
@@ -36,7 +36,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
 			</div>
 
 			{/* Title */}
-			<div className="mt-2 text-center text-dark font-semibold text-sm truncate">
+			<div className="mt-2 text-center text-dark font-semibold text-sm line-clamp-2 leading-tight">
 				{recipe.title}
 			</div>
 		</button>

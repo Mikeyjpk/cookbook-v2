@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import RecipeTitle from "./RecipeTitle";
-import RecipeImage from "./RecipeImage";
-import RecipeInfo from "./RecipeInfo";
 import RecipeIngredients from "./RecipeIngredients";
 import RecipeSteps from "./RecipeSteps";
 import DeleteRecipeButton from "./DeleteRecipeButton";
 import AuthorCard from "./AuthorCard";
+import RecipeHeader from "./RecipeHeader";
 
 interface RecipePageClientProps {
 	recipe: any;
@@ -27,15 +25,7 @@ const RecipePageClient: React.FC<RecipePageClientProps> = ({
 
 	return (
 		<div className="flex flex-col items-center min-h-screen px-4 pb-6 pt-6">
-			<RecipeTitle title={recipe.title} />
-			<RecipeImage image={recipe.image} title={recipe.title} />
-			<RecipeInfo
-				description={recipe.description}
-				prep_time={recipe.prep_time}
-				cook_time={recipe.cook_time}
-				difficulty={recipe.difficulty}
-				servings={recipe.servings}
-			/>
+			<RecipeHeader recipe={recipe} />
 			<RecipeIngredients ingredients={recipe.recipeIngredients} />
 			<RecipeSteps steps={recipe.steps} />
 			{isAuthor ? (

@@ -18,7 +18,7 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ recipe }) => {
 		<div className="flex flex-col">
 			<div className="w-full max-w-[675] bg-medium/20 shadow-md rounded-lg overflow-hidden text-dark">
 				{/* Recipe Title */}
-				<h1 className="text-2xl font-bold text-start mt-2 ml-4 sm:ml-6">
+				<h1 className="text-2xl font-bold text-start mt-3 ml-4 sm:ml-6">
 					{title}
 				</h1>
 
@@ -36,9 +36,11 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ recipe }) => {
 						</p>
 					)}
 					{/* difficulty */}
-					<div className="flex gap-1 text-dark absolute bottom-1 left-2 bg-medium/50 p-2 rounded-lg">
+					<div className="flex gap-2 text-light absolute bottom-1 left-1 bg-dark/80 p-2 rounded-lg items-center">
 						<TbChefHat size={22} />
-						<p className="text-md capitalize">{difficulty}</p>
+						<p className="capitalize text-xs font-semibold text-light">
+							{difficulty}
+						</p>
 					</div>
 				</div>
 

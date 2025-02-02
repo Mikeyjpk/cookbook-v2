@@ -15,7 +15,7 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ recipe }) => {
 	const { title, prep_time, cook_time, image, difficulty, servings } = recipe;
 
 	return (
-		<div className="w-full max-w-[700] bg-medium/20 shadow-md rounded-lg overflow-hidden text-dark">
+		<div className="w-full max-w-[675] bg-medium/20 shadow-md rounded-lg overflow-hidden text-dark">
 			{/* Recipe Title */}
 			<h1 className="text-2xl font-bold text-start mt-2 ml-4 sm:ml-6 overflow-scroll">
 				{title}

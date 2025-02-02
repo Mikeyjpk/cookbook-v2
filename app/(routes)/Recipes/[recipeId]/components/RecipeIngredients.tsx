@@ -3,18 +3,24 @@ const RecipeIngredients: React.FC<{ ingredients: any[] }> = ({
 }) => {
 	return (
 		<div className="w-full max-w-2xl mt-6">
-			<h2 className="text-xl font-semibold text-dark mb-2">
-				Ingredients
-			</h2>
-			<div className="grid grid-cols-2 gap-3">
+			<div className="flex w-full justify-between">
+				<h2 className="text-xl font-semibold text-dark mb-2">
+					Ingredients
+				</h2>
+				<button className="bg-dark rounded-lg w-12 text-light text-lg">
+					add
+				</button>
+			</div>
+
+			<div className="flex flex-col gap-3">
 				{ingredients.length > 0 ? (
-					ingredients.map((ingredient: any, index) => (
+					ingredients.map(({ id, ingredient, quantity, unit }) => (
 						<div
-							key={ingredient.id ?? `ingredient-${index}`}
+							key={id}
 							className="bg-medium/10 p-3 rounded-md shadow-sm"
 						>
 							<p className="text-dark font-medium">
-								{ingredient.quantity} {ingredient.unit}
+								{quantity} {unit} of {ingredient.name}
 							</p>
 						</div>
 					))

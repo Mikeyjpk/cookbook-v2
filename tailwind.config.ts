@@ -36,6 +36,48 @@ export default {
 				// danger: "#D52941",
 				// font: "#000000",
 
+				// // Dev colours dark
+				// light: "#2B2D42",
+				// medium: "#8D99AE",
+				// dark: "#EDF2DE",
+				// danger: "#D52941",
+				// font: "#000000",
+
+				// // Dev colours dark
+				// light: "#EDF2DE",
+				// medium: "#8D99AE",
+				// dark: "#2B2D42",
+				// danger: "#D52941",
+				// font: "#000000",
+
+				// // Dev colours dark
+				// light: "#FEFAE0",
+				// medium: "#606C38",
+				// dark: "#283618",
+				// danger: "#D52941",
+				// font: "#000000",
+
+				// // Dev colours dark
+				// light: "#F2545B",
+				// medium: "#19323C",
+				// dark: "#19323C",
+				// danger: "#D52941",
+				// font: "#000000",
+
+				// // Dev colours dark
+				// light: "#FCFCFC",
+				// medium: "#FEA82F",
+				// dark: "#AF1B3F",
+				// danger: "#D52941",
+				// font: "#000000",
+
+				// // Dev colours dark
+				// light: "#EADDCF",
+				// medium: "#D7A554",
+				// dark: "#363635",
+				// danger: "#D52941",
+				// font: "#000000",
+
 				card: {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",

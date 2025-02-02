@@ -17,7 +17,7 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ recipe }) => {
 
 	return (
 		<div className="flex flex-col">
-			<div className="w-full max-w-[675] bg-medium/20 shadow-md rounded-lg overflow-hidden text-dark">
+			<div className="w-full max-w-[675] bg-medium/50 shadow-md rounded-lg overflow-hidden text-dark">
 				{/* Recipe Title */}
 				<h1 className="text-2xl font-bold text-start mt-3 ml-4 sm:ml-6 capitalize">
 					{title}
@@ -76,17 +76,6 @@ const RecipeHeader: React.FC<RecipeHeaderProps> = ({ recipe }) => {
 								{cook_time} minutes
 							</p>
 						</div>
-						{/* <div className="flex flex-col items-start gap-y-0.5">
-							<div className="flex gap-2 items-center">
-								<TbClock size={22} className="text-dark/80" />
-								<p className="text-xs font-semibold text-dark">
-									Cook
-								</p>
-							</div>
-							<p className="text-xs text-dark/90">
-								{cook_time} minutes
-							</p>
-						</div> */}
 					</div>
 					{/* servings */}
 					<div className="flex flex-col ">

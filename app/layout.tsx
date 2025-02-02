@@ -27,7 +27,9 @@ export default function RootLayout({
 	return (
 		<ClerkProvider>
 			<html lang="en">
-				<body className={`${openSans.variable} antialiased bg-light`}>
+				<body
+					className={`${openSans.variable} antialiased bg-light/80`}
+				>
 					<AppContainer>
 						<Navbar />
 						<ContentContainer>{children}</ContentContainer>

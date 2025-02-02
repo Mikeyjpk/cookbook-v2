@@ -28,14 +28,23 @@ const RecipeSteps: React.FC<{ steps: any[] }> = ({ steps }) => {
 							onClick={() => toggleStep(index)}
 							className={`flex gap-3 items-start p-3 rounded-md cursor-pointer transition-colors ${
 								completedSteps.has(index)
-									? "bg-medium/20 text-light"
+									? "bg-medium/20 text-dark/60"
 									: "bg-medium/60 text-dark"
 							}`}
 						>
-							<span className="font-bold text-dark">
-								{step.order}.
-							</span>
-							<p>{step.description}</p>
+							{/* Keep step number normal */}
+							<span className="font-bold">{step.order}.</span>
+
+							{/* Apply line-through only to the description */}
+							<p
+								className={`${
+									completedSteps.has(index)
+										? "line-through"
+										: ""
+								}`}
+							>
+								{step.description}
+							</p>
 						</div>
 					))
 				) : (
